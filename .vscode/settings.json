@@ -1,0 +1,24 @@
+{
+    "files.exclude": {
+        "**/*.vo": true,
+        "**/*.vok": true,
+        "**/*.vos": true,
+        "**/*.aux": true,
+        "**/*.glob": true,
+        "**/.git": true,
+        "**/.svn": true,
+        "**/.hg": true,
+        "**/.DS_Store": true,
+        "**/Thumbs.db": true
+    },
+    "files.associations": {
+        "system_error": "c",
+        "aes.h": "c",
+        "jab_type.h": "c",
+        "ossl_aes.h": "c",
+        "jab_setup.h": "c",
+        "ossl_aesni_asm.h": "c",
+        "ossl_aesni.h": "c",
+        "stdint.h": "c"
+    }
+}
