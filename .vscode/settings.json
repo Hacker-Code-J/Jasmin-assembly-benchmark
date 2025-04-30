@@ -19,6 +19,9 @@
         "jab_setup.h": "c",
         "ossl_aesni_asm.h": "c",
         "ossl_aesni.h": "c",
-        "stdint.h": "c"
+        "stdint.h": "c",
+        "string.h": "c",
+        "stdio.h": "c",
+        "errno.h": "c"
     }
 }

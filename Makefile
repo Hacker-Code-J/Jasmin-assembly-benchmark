@@ -79,8 +79,7 @@ bench: $(BENCH_EXE)
 # — Clean all build artifacts —
 clean:
 	rm -rf $(OBJ_DIR) $(LIB) \
-	       $(TEST_EXE) $(BENCH_EXE) \
-		   $(VIEW_DIR)/*.csv
+	       $(TEST_EXE) $(BENCH_EXE)
 	@echo "Cleaned up all build artifacts."
 
 # -- Rebuild all targets --
