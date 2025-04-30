@@ -68,38 +68,40 @@ static double median(double *v, int n) {
 
 int main(void) {
     /* Pin to CPU 0 on Linux */
-#ifdef __linux__
+  #ifdef __linux__
     cpu_set_t cpuset;
     CPU_ZERO(&cpuset);
     CPU_SET(0, &cpuset);
     if (sched_setaffinity(0, sizeof(cpuset), &cpuset) != 0) {
         perror("sched_setaffinity");
     }
-#endif
+  #endif
 
-    const size_t sizes[] = {2<<10, 4<<10, 8<<10, 16<<10, 32<<10};
+    const size_t sizes[] = { 2<<10, 4<<10, 8<<10, 16<<10, 32<<10 };
     const int    RUNS   = 100;
     const int    ITER   = 200;
+    const int    NSZ    = sizeof(sizes)/sizeof(sizes[0]);
 
-    /* CSV header */
-    printf("size,run,elapsed_ns,mbps,cycles,cpb\n");
+    /* 1) Detailed per‐run CSV header */
+    puts("size,run,elapsed_ns,mbps,cycles,cpb");
 
-    /* JSON summary start */
-    printf("{\n  \"summary\": [\n");
+    /* 2) Reserve space for summary */
+    double mbps_mean[NSZ],  mbps_sd[NSZ],  mbps_md[NSZ];
+    double cpb_mean[NSZ],   cpb_sd[NSZ],   cpb_md[NSZ];
 
-    for (int si = 0; si < (int)(sizeof(sizes)/sizeof(*sizes)); si++) {
+    for (int si = 0; si < NSZ; si++) {
         size_t N = sizes[si];
 
-        /* allocate 64-byte-aligned buffers */
+        /* allocate 64‐byte aligned buffers */
         u8 *in = NULL, *out = NULL;
-        if (posix_memalign((void**)&in, 64, N) != 0 ||
-            posix_memalign((void**)&out,64, N) != 0) {
+        if (posix_memalign((void**)&in,  64, N) != 0 ||
+            posix_memalign((void**)&out, 64, N) != 0) {
             fprintf(stderr, "posix_memalign failed: %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
         memset(in, 0xA5, N);
 
-        /* set up AES key schedule */
+        /* set up AES key */
         aesni_key_schedule ks;
         u8 fixed_key[16] = {
             0x2b,0x7e,0x15,0x16, 0x28,0xae,0xd2,0xa6,
@@ -112,77 +114,69 @@ int main(void) {
         }
 
         /* warm-up */
-        for (int w = 0; w < 10; w++) {
-            for (size_t off = 0; off < N; off += 16) {
+        for (int w = 0; w < 10; w++)
+            for (size_t off = 0; off < N; off += 16)
                 aesni_encrypt(in + off, out + off, ks);
-            }
-        }
 
-        /* prepare stats arrays */
-        double *mbps = malloc(sizeof(double) * RUNS);
-        double *cpb  = malloc(sizeof(double) * RUNS);
+        /* stats buffers */
+        double *mbps = malloc(sizeof(*mbps) * RUNS);
+        double *cpb  = malloc(sizeof(*cpb ) * RUNS);
 
         /* timed runs */
         for (int run = 0; run < RUNS; run++) {
             struct timespec t0, t1;
             u64 c0, c1;
-
             clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
             c0 = rdtsc();
-            for (int i = 0; i < ITER; i++) {
-                for (size_t off = 0; off < N; off += 16) {
+            for (int i = 0; i < ITER; i++)
+                for (size_t off = 0; off < N; off += 16)
                     aesni_encrypt(in + off, out + off, ks);
-                }
-            }
             clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
             c1 = rdtsc();
 
-            u64 dt_ns    = diff_ns(&t0, &t1);
-            double secs  = dt_ns / 1e9;
-            double bytes = (double)N * ITER;
-            double m     = bytes / (1024.0*1024.0) / secs;
-            u64 cycles   = c1 - c0;
-            double cpbv  = cycles / bytes;
+            u64 dt_ns   = diff_ns(&t0, &t1);
+            double secs = dt_ns / 1e9;
+            double bytes= (double)N * ITER;
+            double m    = bytes / (1024.0*1024.0) / secs;
+            u64 cycles  = c1 - c0;
+            double cpbv = cycles / bytes;
 
             mbps[run] = m;
             cpb [run] = cpbv;
 
-            /* emit CSV line */
+            /* 1‐line CSV */
             printf("%zu,%d,%" PRIu64 ",%.2f,%" PRIu64 ",%.2e\n",
                    N, run, dt_ns, m, cycles, cpbv);
         }
 
-        /* compute summary stats */
-        double m_mu = mean (mbps, RUNS);
+        /* compute summary for this size */
+        double m_mu = mean(mbps, RUNS);
         double m_sd = stddev(mbps, RUNS, m_mu);
         double m_md = median(mbps, RUNS);
-        double c_mu = mean (cpb,  RUNS);
-        double c_sd = stddev(cpb,  RUNS, c_mu);
-        double c_md = median(cpb,  RUNS);
+        double c_mu = mean(cpb,   RUNS);
+        double c_sd = stddev(cpb,   RUNS, c_mu);
+        double c_md = median(cpb,   RUNS);
 
-        /* emit JSON entry */
-        printf("    {\n"
-               "      \"size\": %zu,\n"
-               "      \"runs\": %d,\n"
-               "      \"mbps_mean\": %.2f,\n"
-               "      \"mbps_stddev\": %.2f,\n"
-               "      \"mbps_median\": %.2f,\n"
-               "      \"cpb_mean\": %.2e,\n"
-               "      \"cpb_stddev\": %.2e,\n"
-               "      \"cpb_median\": %.2e\n"
-               "    }%s\n",
-               N, RUNS,
-               m_mu, m_sd, m_md,
-               c_mu, c_sd, c_md,
-               (si + 1 < (int)(sizeof(sizes)/sizeof(*sizes))) ? "," : "");
+        mbps_mean[si] = m_mu;
+        mbps_sd[si]   = m_sd;
+        mbps_md[si]   = m_md;
+        cpb_mean[si]  = c_mu;
+        cpb_sd[si]    = c_sd;
+        cpb_md[si]    = c_md;
 
-        free(in);
-        free(out);
-        free(mbps);
-        free(cpb);
+        free(in); free(out);
+        free(mbps); free(cpb);
     }
 
-    /* JSON summary end */
-    printf("  ]\n}\n");
+    /* 3) Print summary CSV */
+    puts("\n# summary over runs");
+    puts("size,mbps_mean,mbps_stddev,mbps_median,cpb_mean,cpb_stddev,cpb_median");
+    for (int si = 0; si < NSZ; si++) {
+        printf("%zu,%.2f,%.2f,%.2f,%.2e,%.2e,%.2e\n",
+               sizes[si],
+               mbps_mean[si], mbps_sd[si], mbps_md[si],
+               cpb_mean[si],  cpb_sd[si],  cpb_md[si]);
+    }
+
     return 0;
 }
