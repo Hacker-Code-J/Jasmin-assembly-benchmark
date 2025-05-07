@@ -1,0 +1,2 @@
+gcc -std=c99 -O2 -march=x86-64 -I. bench_aesni.c aesni-x86_64.S -o bench_aesni -lm
+gcc -std=c99 -O2 -march=x86-64 -I. bench_jasmin_aes.c jasmin_aes.S -o bench_jasmin_aes -lm

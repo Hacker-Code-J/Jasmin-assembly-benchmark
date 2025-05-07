@@ -1,13 +1,28 @@
-// benches/bench_ossl_aes.c
-// #define _POSIX_C_SOURCE 199309L
+// gcc -O2 -march=x86-64 -mavx2 -c bench_kem_kyber_ref.c -I./
+// gcc -O2 -march=x86-64 -mavx2 -c jade_kem_keyber.c -I./
+// gcc -O2 -march=x86-64 -mavx2 -c libjade_randombytes.c -I./
+// gcc -O2 -march=x86-64 -mavx2 -c kem.S -I./
+
+// gcc -O2 -march=x86-64 -mavx2 bench_kem_kyber_ref.o jade_kem_keyber.o libjade_randombytes.o kem.o -o bench_kyber -lm
+// ./bench_kyber
+
+
 #define _POSIX_C_SOURCE 200809L
 #ifdef __linux__
   #define _GNU_SOURCE
   #include <sched.h>
 #endif
 #include <errno.h>
-#include "../include/jab_setup.h"   // your typedefs for u8, size_t, etc.
-#include "../include//openssl/ossl_aes.h"    // your renamed aes header
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <time.h>
+#include <inttypes.h>
+#include <math.h>
+#include "jade_kem_keyber.h"
+
+typedef uint8_t  u8;
+typedef uint64_t u64;
 
 // rdtsc cycle counter
 static inline u64 rdtsc(void) {
@@ -79,31 +94,23 @@ int main(void) {
         size_t N = sizes[si];
 
         // Allocate aligned buffers
-        u8 *in = NULL, *out = NULL;
+        u8 *in = NULL, *out = NULL, *coins = malloc(N);  // Assuming coins size is the same as N for simplicity
         if (posix_memalign((void**)&in, 64, N) != 0 ||
-            posix_memalign((void**)&out,64, N) != 0) {
+            posix_memalign((void**)&out,64, N) != 0 ||
+            coins == NULL) {
             fprintf(stderr, "posix_memalign failed: %s\n", strerror(errno));
             exit(EXIT_FAILURE);
         }
         memset(in, 0xA5, N);
+        memset(coins, 0x00, N);
 
-        // Set up AES key
-        AES_KEY key;
-        u8 fixed_key[16] = {
-            0x2b,0x7e,0x15,0x16, 0x28,0xae,0xd2,0xa6,
-            0xab,0xf7,0x15,0x88, 0x09,0xcf,0x4f,0x3c
-        };
-        if (AES_set_encrypt_key(fixed_key, 128, &key) < 0) {
-            fprintf(stderr, "AES_set_encrypt_key failed\n");
-            free(in); free(out);
-            return EXIT_FAILURE;
-        }
-
-        // Warm-up loop
+        // Warm-up loop for the jade functions
+        uint8_t public_key[JADE_KEM_kyber_kyber512_amd64_ref_KEYPAIRCOINBYTES];
+        uint8_t secret_key[JADE_KEM_kyber_kyber512_amd64_ref_KEYPAIRCOINBYTES];
         for (int w = 0; w < 10; w++) {
-            for (size_t off = 0; off < N; off += 16) {
-                AES_encrypt(in + off, out + off, &key);
-            }
+            jade_kem_kyber_kyber512_amd64_ref_keypair_derand(public_key, secret_key, coins);
+            jade_kem_kyber_kyber512_amd64_ref_enc_derand(out, public_key, secret_key, coins);
+            jade_kem_kyber_kyber512_amd64_ref_dec(out, secret_key, out);
         }
 
         // Prepare arrays
@@ -118,9 +125,9 @@ int main(void) {
             clock_gettime(CLOCK_MONOTONIC_RAW, &t0);
             c0 = rdtsc();
             for (int i = 0; i < ITER; i++) {
-                for (size_t off = 0; off < N; off += 16) {
-                    AES_encrypt(in + off, out + off, &key);
-                }
+                jade_kem_kyber_kyber512_amd64_ref_keypair_derand(public_key, secret_key, coins);
+                jade_kem_kyber_kyber512_amd64_ref_enc_derand(out, public_key, secret_key, coins);
+                jade_kem_kyber_kyber512_amd64_ref_dec(out, secret_key, out);
             }
             clock_gettime(CLOCK_MONOTONIC_RAW, &t1);
             c1 = rdtsc();
@@ -157,6 +164,7 @@ int main(void) {
 
         free(in);
         free(out);
+        free(coins);
         free(mbps);
         free(cpb);
     }
