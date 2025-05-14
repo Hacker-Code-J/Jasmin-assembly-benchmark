@@ -77,7 +77,16 @@
     "common.h": "c",
     "fips202x4.h": "c",
     "ds_benchmark.h": "c",
-    "rand.h": "c"
+    "rand.h": "c",
+    "aesni.h": "c",
+    "sha3_256_ref.h": "c",
+    "assert.h": "c",
+    "e_os2.h": "c",
+    "time.h": "c",
+    "keccakp-1600-snp.h": "c",
+    "keccakp-1600-snp-avx2.h": "c",
+    "keccackp-1600_jazz_ref.h": "c",
+    "brg_endian.h": "c"
   },
   "C_Cpp_Runner.cCompilerPath": "gcc",
   "C_Cpp_Runner.cppCompilerPath": "g++",

@@ -1,0 +1,53 @@
+/*
+The eXtended Keccak Code Package (XKCP)
+https://github.com/XKCP/XKCP
+
+The Keccak-p permutations, designed by Guido Bertoni, Joan Daemen, Michaël Peeters and Gilles Van Assche.
+
+Implementation by the designers, hereby denoted as "the implementer".
+
+For more information, feedback or questions, please refer to the Keccak Team website:
+https://keccak.team/
+
+To the extent possible under law, the implementer has waived all copyright
+and related or neighboring rights to the source code in this file.
+http://creativecommons.org/publicdomain/zero/1.0/
+
+---
+
+Please refer to SnP-documentation.h for more details.
+*/
+
+#ifndef _KeccakP_1600_SnP_h_
+#define _KeccakP_1600_SnP_h_
+
+#include <stdint.h>
+
+typedef struct {
+    uint8_t A[200];
+} KeccakP1600_plain8_state;
+
+typedef KeccakP1600_plain8_state KeccakP1600_state;
+
+#define KeccakP1600_implementation      "64-bit reference implementation"
+
+#define KeccakP1600_StaticInitialize()
+
+extern void KeccakP1600_Initialize(KeccakP1600_plain8_state *state);
+extern void KeccakP1600_AddByte(KeccakP1600_plain8_state *state, unsigned char data, unsigned int offset);
+extern void KeccakP1600_AddBytes(KeccakP1600_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
+extern void KeccakP1600_OverwriteBytes(KeccakP1600_plain8_state *state, const unsigned char *data, unsigned int offset, unsigned int length);
+extern void KeccakP1600_OverwriteWithZeroes(KeccakP1600_plain8_state *state, unsigned int byteCount);
+extern void KeccakP1600_Permute_Nrounds(KeccakP1600_plain8_state *state, unsigned int nrounds);
+extern void KeccakP1600_Permute_12rounds(KeccakP1600_plain8_state *state);
+extern void KeccakP1600_Permute_24rounds(KeccakP1600_plain8_state *state);
+extern void KeccakP1600_ExtractBytes(const KeccakP1600_plain8_state *state, unsigned char *data, unsigned int offset, unsigned int length);
+extern void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain8_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
+
+#ifdef JASMIN
+int jade_hash_sha3_256_amd64(uint8_t *hash, const uint8_t *input, uint64_t input_length);
+#else
+int sha3(uint8_t *hash, const uint8_t *input, uint64_t input_length);
+#endif
+
+#endif

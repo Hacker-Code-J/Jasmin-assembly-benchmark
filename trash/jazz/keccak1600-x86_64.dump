@@ -1,0 +1,352 @@
+
+keccak1600-x86_64.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <__KeccakF1600>:
+   0:	48 8b 47 3c          	mov    0x3c(%rdi),%rax
+   4:	48 8b 5f 44          	mov    0x44(%rdi),%rbx
+   8:	48 8b 4f 4c          	mov    0x4c(%rdi),%rcx
+   c:	48 8b 57 54          	mov    0x54(%rdi),%rdx
+  10:	48 8b 6f 5c          	mov    0x5c(%rdi),%rbp
+  14:	eb 0a                	jmp    20 <__KeccakF1600+0x20>
+  16:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+  1d:	00 00 00 
+  20:	4c 8b 47 9c          	mov    -0x64(%rdi),%r8
+  24:	4c 8b 4f cc          	mov    -0x34(%rdi),%r9
+  28:	4c 8b 57 fc          	mov    -0x4(%rdi),%r10
+  2c:	4c 8b 5f 2c          	mov    0x2c(%rdi),%r11
+  30:	48 33 4f ac          	xor    -0x54(%rdi),%rcx
+  34:	48 33 57 b4          	xor    -0x4c(%rdi),%rdx
+  38:	4c 31 c0             	xor    %r8,%rax
+  3b:	48 33 5f a4          	xor    -0x5c(%rdi),%rbx
+  3f:	48 33 4f d4          	xor    -0x2c(%rdi),%rcx
+  43:	48 33 47 c4          	xor    -0x3c(%rdi),%rax
+  47:	49 89 ec             	mov    %rbp,%r12
+  4a:	48 33 6f bc          	xor    -0x44(%rdi),%rbp
+  4e:	4c 31 d1             	xor    %r10,%rcx
+  51:	48 33 47 ec          	xor    -0x14(%rdi),%rax
+  55:	48 33 57 dc          	xor    -0x24(%rdi),%rdx
+  59:	4c 31 cb             	xor    %r9,%rbx
+  5c:	48 33 6f e4          	xor    -0x1c(%rdi),%rbp
+  60:	48 33 4f 24          	xor    0x24(%rdi),%rcx
+  64:	48 33 47 14          	xor    0x14(%rdi),%rax
+  68:	48 33 57 04          	xor    0x4(%rdi),%rdx
+  6c:	48 33 5f f4          	xor    -0xc(%rdi),%rbx
+  70:	48 33 6f 0c          	xor    0xc(%rdi),%rbp
+  74:	49 89 cd             	mov    %rcx,%r13
+  77:	48 d1 c1             	rol    %rcx
+  7a:	48 31 c1             	xor    %rax,%rcx
+  7d:	4c 31 da             	xor    %r11,%rdx
+  80:	48 d1 c0             	rol    %rax
+  83:	48 31 d0             	xor    %rdx,%rax
+  86:	48 33 5f 1c          	xor    0x1c(%rdi),%rbx
+  8a:	48 d1 c2             	rol    %rdx
+  8d:	48 31 da             	xor    %rbx,%rdx
+  90:	48 33 6f 34          	xor    0x34(%rdi),%rbp
+  94:	48 d1 c3             	rol    %rbx
+  97:	48 31 eb             	xor    %rbp,%rbx
+  9a:	48 d1 c5             	rol    %rbp
+  9d:	4c 31 ed             	xor    %r13,%rbp
+  a0:	49 31 c9             	xor    %rcx,%r9
+  a3:	49 31 d2             	xor    %rdx,%r10
+  a6:	49 c1 c1 2c          	rol    $0x2c,%r9
+  aa:	49 31 eb             	xor    %rbp,%r11
+  ad:	49 31 c4             	xor    %rax,%r12
+  b0:	49 c1 c2 2b          	rol    $0x2b,%r10
+  b4:	49 31 d8             	xor    %rbx,%r8
+  b7:	4d 89 cd             	mov    %r9,%r13
+  ba:	49 c1 c3 15          	rol    $0x15,%r11
+  be:	4d 09 d1             	or     %r10,%r9
+  c1:	4d 31 c1             	xor    %r8,%r9
+  c4:	49 c1 c4 0e          	rol    $0xe,%r12
+  c8:	4d 33 0f             	xor    (%r15),%r9
+  cb:	4d 8d 7f 08          	lea    0x8(%r15),%r15
+  cf:	4d 89 e6             	mov    %r12,%r14
+  d2:	4d 21 dc             	and    %r11,%r12
+  d5:	4c 89 4e 9c          	mov    %r9,-0x64(%rsi)
+  d9:	4d 31 d4             	xor    %r10,%r12
+  dc:	49 f7 d2             	not    %r10
+  df:	4c 89 66 ac          	mov    %r12,-0x54(%rsi)
+  e3:	4d 09 da             	or     %r11,%r10
+  e6:	4c 8b 67 4c          	mov    0x4c(%rdi),%r12
+  ea:	4d 31 ea             	xor    %r13,%r10
+  ed:	4c 89 56 a4          	mov    %r10,-0x5c(%rsi)
+  f1:	4d 21 c5             	and    %r8,%r13
+  f4:	4c 8b 4f e4          	mov    -0x1c(%rdi),%r9
+  f8:	4d 31 f5             	xor    %r14,%r13
+  fb:	4c 8b 57 ec          	mov    -0x14(%rdi),%r10
+  ff:	4c 89 6e bc          	mov    %r13,-0x44(%rsi)
+ 103:	4d 09 c6             	or     %r8,%r14
+ 106:	4c 8b 47 b4          	mov    -0x4c(%rdi),%r8
+ 10a:	4d 31 de             	xor    %r11,%r14
+ 10d:	4c 8b 5f 1c          	mov    0x1c(%rdi),%r11
+ 111:	4c 89 76 b4          	mov    %r14,-0x4c(%rsi)
+ 115:	49 31 e8             	xor    %rbp,%r8
+ 118:	49 31 d4             	xor    %rdx,%r12
+ 11b:	49 c1 c0 1c          	rol    $0x1c,%r8
+ 11f:	49 31 cb             	xor    %rcx,%r11
+ 122:	49 31 c1             	xor    %rax,%r9
+ 125:	49 c1 c4 3d          	rol    $0x3d,%r12
+ 129:	49 c1 c3 2d          	rol    $0x2d,%r11
+ 12d:	49 31 da             	xor    %rbx,%r10
+ 130:	49 c1 c1 14          	rol    $0x14,%r9
+ 134:	4d 89 c5             	mov    %r8,%r13
+ 137:	4d 09 e0             	or     %r12,%r8
+ 13a:	49 c1 c2 03          	rol    $0x3,%r10
+ 13e:	4d 31 d8             	xor    %r11,%r8
+ 141:	4c 89 46 dc          	mov    %r8,-0x24(%rsi)
+ 145:	4d 89 ce             	mov    %r9,%r14
+ 148:	4d 21 e9             	and    %r13,%r9
+ 14b:	4c 8b 47 a4          	mov    -0x5c(%rdi),%r8
+ 14f:	4d 31 e1             	xor    %r12,%r9
+ 152:	49 f7 d4             	not    %r12
+ 155:	4c 89 4e e4          	mov    %r9,-0x1c(%rsi)
+ 159:	4d 09 dc             	or     %r11,%r12
+ 15c:	4c 8b 4f d4          	mov    -0x2c(%rdi),%r9
+ 160:	4d 31 d4             	xor    %r10,%r12
+ 163:	4c 89 66 d4          	mov    %r12,-0x2c(%rsi)
+ 167:	4d 21 d3             	and    %r10,%r11
+ 16a:	4c 8b 67 3c          	mov    0x3c(%rdi),%r12
+ 16e:	4d 31 f3             	xor    %r14,%r11
+ 171:	4c 89 5e cc          	mov    %r11,-0x34(%rsi)
+ 175:	4d 09 d6             	or     %r10,%r14
+ 178:	4c 8b 57 04          	mov    0x4(%rdi),%r10
+ 17c:	4d 31 ee             	xor    %r13,%r14
+ 17f:	4c 8b 5f 34          	mov    0x34(%rdi),%r11
+ 183:	4c 89 76 c4          	mov    %r14,-0x3c(%rsi)
+ 187:	49 31 ea             	xor    %rbp,%r10
+ 18a:	49 31 c3             	xor    %rax,%r11
+ 18d:	49 c1 c2 19          	rol    $0x19,%r10
+ 191:	49 31 d1             	xor    %rdx,%r9
+ 194:	49 c1 c3 08          	rol    $0x8,%r11
+ 198:	49 31 dc             	xor    %rbx,%r12
+ 19b:	49 c1 c1 06          	rol    $0x6,%r9
+ 19f:	49 31 c8             	xor    %rcx,%r8
+ 1a2:	49 c1 c4 12          	rol    $0x12,%r12
+ 1a6:	4d 89 d5             	mov    %r10,%r13
+ 1a9:	4d 21 da             	and    %r11,%r10
+ 1ac:	49 d1 c0             	rol    %r8
+ 1af:	49 f7 d3             	not    %r11
+ 1b2:	4d 31 ca             	xor    %r9,%r10
+ 1b5:	4c 89 56 f4          	mov    %r10,-0xc(%rsi)
+ 1b9:	4d 89 e6             	mov    %r12,%r14
+ 1bc:	4d 21 dc             	and    %r11,%r12
+ 1bf:	4c 8b 57 f4          	mov    -0xc(%rdi),%r10
+ 1c3:	4d 31 ec             	xor    %r13,%r12
+ 1c6:	4c 89 66 fc          	mov    %r12,-0x4(%rsi)
+ 1ca:	4d 09 cd             	or     %r9,%r13
+ 1cd:	4c 8b 67 54          	mov    0x54(%rdi),%r12
+ 1d1:	4d 31 c5             	xor    %r8,%r13
+ 1d4:	4c 89 6e ec          	mov    %r13,-0x14(%rsi)
+ 1d8:	4d 21 c1             	and    %r8,%r9
+ 1db:	4d 31 f1             	xor    %r14,%r9
+ 1de:	4c 89 4e 0c          	mov    %r9,0xc(%rsi)
+ 1e2:	4d 09 c6             	or     %r8,%r14
+ 1e5:	4c 8b 4f c4          	mov    -0x3c(%rdi),%r9
+ 1e9:	4d 31 de             	xor    %r11,%r14
+ 1ec:	4c 8b 5f 24          	mov    0x24(%rdi),%r11
+ 1f0:	4c 89 76 04          	mov    %r14,0x4(%rsi)
+ 1f4:	4c 8b 47 bc          	mov    -0x44(%rdi),%r8
+ 1f8:	49 31 ca             	xor    %rcx,%r10
+ 1fb:	49 31 d3             	xor    %rdx,%r11
+ 1fe:	49 c1 c2 0a          	rol    $0xa,%r10
+ 202:	49 31 d9             	xor    %rbx,%r9
+ 205:	49 c1 c3 0f          	rol    $0xf,%r11
+ 209:	49 31 ec             	xor    %rbp,%r12
+ 20c:	49 c1 c1 24          	rol    $0x24,%r9
+ 210:	49 31 c0             	xor    %rax,%r8
+ 213:	49 c1 c4 38          	rol    $0x38,%r12
+ 217:	4d 89 d5             	mov    %r10,%r13
+ 21a:	4d 09 da             	or     %r11,%r10
+ 21d:	49 c1 c0 1b          	rol    $0x1b,%r8
+ 221:	49 f7 d3             	not    %r11
+ 224:	4d 31 ca             	xor    %r9,%r10
+ 227:	4c 89 56 1c          	mov    %r10,0x1c(%rsi)
+ 22b:	4d 89 e6             	mov    %r12,%r14
+ 22e:	4d 09 dc             	or     %r11,%r12
+ 231:	4d 31 ec             	xor    %r13,%r12
+ 234:	4c 89 66 24          	mov    %r12,0x24(%rsi)
+ 238:	4d 21 cd             	and    %r9,%r13
+ 23b:	4d 31 c5             	xor    %r8,%r13
+ 23e:	4c 89 6e 14          	mov    %r13,0x14(%rsi)
+ 242:	4d 09 c1             	or     %r8,%r9
+ 245:	4d 31 f1             	xor    %r14,%r9
+ 248:	4c 89 4e 34          	mov    %r9,0x34(%rsi)
+ 24c:	4d 21 f0             	and    %r14,%r8
+ 24f:	4d 31 d8             	xor    %r11,%r8
+ 252:	4c 89 46 2c          	mov    %r8,0x2c(%rsi)
+ 256:	48 33 57 ac          	xor    -0x54(%rdi),%rdx
+ 25a:	48 33 6f dc          	xor    -0x24(%rdi),%rbp
+ 25e:	48 c1 c2 3e          	rol    $0x3e,%rdx
+ 262:	48 33 4f 44          	xor    0x44(%rdi),%rcx
+ 266:	48 c1 c5 37          	rol    $0x37,%rbp
+ 26a:	48 33 47 0c          	xor    0xc(%rdi),%rax
+ 26e:	48 c1 c1 02          	rol    $0x2,%rcx
+ 272:	48 33 5f 14          	xor    0x14(%rdi),%rbx
+ 276:	48 87 f7             	xchg   %rsi,%rdi
+ 279:	48 c1 c0 27          	rol    $0x27,%rax
+ 27d:	48 c1 c3 29          	rol    $0x29,%rbx
+ 281:	49 89 d5             	mov    %rdx,%r13
+ 284:	48 21 ea             	and    %rbp,%rdx
+ 287:	48 f7 d5             	not    %rbp
+ 28a:	48 31 ca             	xor    %rcx,%rdx
+ 28d:	48 89 57 5c          	mov    %rdx,0x5c(%rdi)
+ 291:	49 89 c6             	mov    %rax,%r14
+ 294:	48 21 e8             	and    %rbp,%rax
+ 297:	4c 31 e8             	xor    %r13,%rax
+ 29a:	48 89 47 3c          	mov    %rax,0x3c(%rdi)
+ 29e:	49 09 cd             	or     %rcx,%r13
+ 2a1:	49 31 dd             	xor    %rbx,%r13
+ 2a4:	4c 89 6f 54          	mov    %r13,0x54(%rdi)
+ 2a8:	48 21 d9             	and    %rbx,%rcx
+ 2ab:	4c 31 f1             	xor    %r14,%rcx
+ 2ae:	48 89 4f 4c          	mov    %rcx,0x4c(%rdi)
+ 2b2:	4c 09 f3             	or     %r14,%rbx
+ 2b5:	48 31 eb             	xor    %rbp,%rbx
+ 2b8:	48 89 5f 44          	mov    %rbx,0x44(%rdi)
+ 2bc:	48 89 d5             	mov    %rdx,%rbp
+ 2bf:	4c 89 ea             	mov    %r13,%rdx
+ 2c2:	49 f7 c7 ff 00 00 00 	test   $0xff,%r15
+ 2c9:	0f 85 51 fd ff ff    	jne    20 <__KeccakF1600+0x20>
+ 2cf:	4d 8d bf 40 ff ff ff 	lea    -0xc0(%r15),%r15
+ 2d6:	f3 c3                	repz ret 
+ 2d8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 2df:	00 
+
+00000000000002e0 <KeccakF1600>:
+ 2e0:	53                   	push   %rbx
+ 2e1:	55                   	push   %rbp
+ 2e2:	41 54                	push   %r12
+ 2e4:	41 55                	push   %r13
+ 2e6:	41 56                	push   %r14
+ 2e8:	41 57                	push   %r15
+ 2ea:	48 8d 7f 64          	lea    0x64(%rdi),%rdi
+ 2ee:	48 81 ec c8 00 00 00 	sub    $0xc8,%rsp
+ 2f5:	48 f7 57 a4          	notq   -0x5c(%rdi)
+ 2f9:	48 f7 57 ac          	notq   -0x54(%rdi)
+ 2fd:	48 f7 57 dc          	notq   -0x24(%rdi)
+ 301:	48 f7 57 fc          	notq   -0x4(%rdi)
+ 305:	48 f7 57 24          	notq   0x24(%rdi)
+ 309:	48 f7 57 3c          	notq   0x3c(%rdi)
+ 30d:	4c 8d 3d 00 00 00 00 	lea    0x0(%rip),%r15        # 314 <KeccakF1600+0x34>
+ 314:	48 8d 74 24 64       	lea    0x64(%rsp),%rsi
+ 319:	e8 e2 fc ff ff       	call   0 <__KeccakF1600>
+ 31e:	48 f7 57 a4          	notq   -0x5c(%rdi)
+ 322:	48 f7 57 ac          	notq   -0x54(%rdi)
+ 326:	48 f7 57 dc          	notq   -0x24(%rdi)
+ 32a:	48 f7 57 fc          	notq   -0x4(%rdi)
+ 32e:	48 f7 57 24          	notq   0x24(%rdi)
+ 332:	48 f7 57 3c          	notq   0x3c(%rdi)
+ 336:	48 8d 7f 9c          	lea    -0x64(%rdi),%rdi
+ 33a:	48 81 c4 c8 00 00 00 	add    $0xc8,%rsp
+ 341:	41 5f                	pop    %r15
+ 343:	41 5e                	pop    %r14
+ 345:	41 5d                	pop    %r13
+ 347:	41 5c                	pop    %r12
+ 349:	5d                   	pop    %rbp
+ 34a:	5b                   	pop    %rbx
+ 34b:	f3 c3                	repz ret 
+ 34d:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 354:	00 00 00 00 
+ 358:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 35f:	00 
+
+0000000000000360 <SHA3_absorb>:
+ 360:	53                   	push   %rbx
+ 361:	55                   	push   %rbp
+ 362:	41 54                	push   %r12
+ 364:	41 55                	push   %r13
+ 366:	41 56                	push   %r14
+ 368:	41 57                	push   %r15
+ 36a:	48 8d 7f 64          	lea    0x64(%rdi),%rdi
+ 36e:	48 81 ec e8 00 00 00 	sub    $0xe8,%rsp
+ 375:	49 89 f1             	mov    %rsi,%r9
+ 378:	48 8d 74 24 64       	lea    0x64(%rsp),%rsi
+ 37d:	48 f7 57 a4          	notq   -0x5c(%rdi)
+ 381:	48 f7 57 ac          	notq   -0x54(%rdi)
+ 385:	48 f7 57 dc          	notq   -0x24(%rdi)
+ 389:	48 f7 57 fc          	notq   -0x4(%rdi)
+ 38d:	48 f7 57 24          	notq   0x24(%rdi)
+ 391:	48 f7 57 3c          	notq   0x3c(%rdi)
+ 395:	4c 8d 3d 00 00 00 00 	lea    0x0(%rip),%r15        # 39c <SHA3_absorb+0x3c>
+ 39c:	48 89 4e 74          	mov    %rcx,0x74(%rsi)
+ 3a0:	48 39 ca             	cmp    %rcx,%rdx
+ 3a3:	72 5b                	jb     400 <SHA3_absorb+0xa0>
+ 3a5:	48 c1 e9 03          	shr    $0x3,%rcx
+ 3a9:	4c 8d 47 9c          	lea    -0x64(%rdi),%r8
+ 3ad:	49 8b 01             	mov    (%r9),%rax
+ 3b0:	4d 8d 49 08          	lea    0x8(%r9),%r9
+ 3b4:	49 33 00             	xor    (%r8),%rax
+ 3b7:	4d 8d 40 08          	lea    0x8(%r8),%r8
+ 3bb:	48 83 ea 08          	sub    $0x8,%rdx
+ 3bf:	49 89 40 f8          	mov    %rax,-0x8(%r8)
+ 3c3:	48 83 e9 01          	sub    $0x1,%rcx
+ 3c7:	75 e4                	jne    3ad <SHA3_absorb+0x4d>
+ 3c9:	4c 89 4e 64          	mov    %r9,0x64(%rsi)
+ 3cd:	48 89 56 6c          	mov    %rdx,0x6c(%rsi)
+ 3d1:	e8 2a fc ff ff       	call   0 <__KeccakF1600>
+ 3d6:	4c 8b 4e 64          	mov    0x64(%rsi),%r9
+ 3da:	48 8b 56 6c          	mov    0x6c(%rsi),%rdx
+ 3de:	48 8b 4e 74          	mov    0x74(%rsi),%rcx
+ 3e2:	eb bc                	jmp    3a0 <SHA3_absorb+0x40>
+ 3e4:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 3eb:	00 00 00 00 
+ 3ef:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 3f6:	00 00 00 00 
+ 3fa:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 400:	48 89 d0             	mov    %rdx,%rax
+ 403:	48 f7 57 a4          	notq   -0x5c(%rdi)
+ 407:	48 f7 57 ac          	notq   -0x54(%rdi)
+ 40b:	48 f7 57 dc          	notq   -0x24(%rdi)
+ 40f:	48 f7 57 fc          	notq   -0x4(%rdi)
+ 413:	48 f7 57 24          	notq   0x24(%rdi)
+ 417:	48 f7 57 3c          	notq   0x3c(%rdi)
+ 41b:	48 81 c4 e8 00 00 00 	add    $0xe8,%rsp
+ 422:	41 5f                	pop    %r15
+ 424:	41 5e                	pop    %r14
+ 426:	41 5d                	pop    %r13
+ 428:	41 5c                	pop    %r12
+ 42a:	5d                   	pop    %rbp
+ 42b:	5b                   	pop    %rbx
+ 42c:	f3 c3                	repz ret 
+ 42e:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 435:	00 00 00 00 
+ 439:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000440 <SHA3_squeeze>:
+ 440:	41 54                	push   %r12
+ 442:	41 55                	push   %r13
+ 444:	41 56                	push   %r14
+ 446:	48 c1 e9 03          	shr    $0x3,%rcx
+ 44a:	49 89 f9             	mov    %rdi,%r9
+ 44d:	49 89 f4             	mov    %rsi,%r12
+ 450:	49 89 d5             	mov    %rdx,%r13
+ 453:	49 89 ce             	mov    %rcx,%r14
+ 456:	41 0f ba e0 00       	bt     $0x0,%r8d
+ 45b:	72 25                	jb     482 <SHA3_squeeze+0x42>
+ 45d:	eb 01                	jmp    460 <SHA3_squeeze+0x20>
+ 45f:	90                   	nop
+ 460:	49 83 fd 08          	cmp    $0x8,%r13
+ 464:	72 29                	jb     48f <SHA3_squeeze+0x4f>
+ 466:	49 8b 01             	mov    (%r9),%rax
+ 469:	4d 8d 49 08          	lea    0x8(%r9),%r9
+ 46d:	49 89 04 24          	mov    %rax,(%r12)
+ 471:	4d 8d 64 24 08       	lea    0x8(%r12),%r12
+ 476:	49 83 ed 08          	sub    $0x8,%r13
+ 47a:	74 1e                	je     49a <SHA3_squeeze+0x5a>
+ 47c:	48 83 e9 01          	sub    $0x1,%rcx
+ 480:	75 de                	jne    460 <SHA3_squeeze+0x20>
+ 482:	e8 59 fe ff ff       	call   2e0 <KeccakF1600>
+ 487:	49 89 f9             	mov    %rdi,%r9
+ 48a:	4c 89 f1             	mov    %r14,%rcx
+ 48d:	eb d1                	jmp    460 <SHA3_squeeze+0x20>
+ 48f:	4c 89 ce             	mov    %r9,%rsi
+ 492:	4c 89 e7             	mov    %r12,%rdi
+ 495:	4c 89 e9             	mov    %r13,%rcx
+ 498:	f3 a4                	rep movsb %ds:(%rsi),%es:(%rdi)
+ 49a:	41 5e                	pop    %r14
+ 49c:	41 5d                	pop    %r13
+ 49e:	41 5c                	pop    %r12
+ 4a0:	f3 c3                	repz ret 

@@ -1,0 +1,412 @@
+*** Keccak-p[1600] ***
+Implementation: 64-bit reference implementation
+
+Time for KeccakP1600_Permute_24rounds(state): 16490
+
+Time for KeccakP1600_Permute_12rounds(state): 8262
+
+Time for loop of KeccakP1600_AddBytes() and KeccakP1600_Permute_24rounds(): 
+     laneCount:     16          17          21
+       1 block:  16728       13430       13498
+      10 blocks: 167892      134844      135320
+     100 blocks: 1342592     1345754     1357042
+    1000 blocks: 13467842    13485386    13535638
+    cycles/byte:  114.75       99.05       80.53
+
+SnP_FastLoop_Absorb() is not supported.
+
+*** Keccak sponge functions using Keccak-f[1600] ***
+Implementation: 64-bit reference implementation
+
+Time for KeccakWidth1600_Sponge() with varying input sizes:
+                         1 block  2 blocks  100 blocks  ratio  slope
+Keccak[r= 576, c=1024]     14414     28116     1356871 188.48 188.32
+Keccak[r= 832, c= 768]     14585     28117     1363569 131.13 131.03
+Keccak[r=1088, c= 512]     14449     28253     1378631 101.38 101.32
+Keccak[r=1152, c= 448]     14653     28252     1376251  95.58  95.52
+Keccak[r=1344, c= 256]     14551     28287     1384139  82.39  82.35
+
+
+*** TurboSHAKE ***
+Implementation: 64-bit reference implementation
+
+Time for TurboSHAKE_Sponge() with varying input sizes:
+                         1 block  2 blocks  100 blocks  ratio  slope
+TurboSHAKE256               7751     14721      700875  51.54  51.48
+TurboSHAKE128               7717     14789      701385  41.75  41.70
+
+
+*** ParallelHash128 ***
+Using Keccak-f[1600] implementations:
+- ×1: 64-bit reference implementation
+- ×2: not used
+- ×4: not used
+- ×8: not used
+
+Block size: 8192 bytes
+    1625 bytes:    166871 cycles, 102.690 cycles/byte
+     +1 block:     844967 cycles, 82.775 cycles/byte (slope)
+     +2 blocks:   1521702 cycles, 82.692 cycles/byte (slope)
+     +4 blocks:   2886327 cycles, 82.991 cycles/byte (slope)
+     +8 blocks:   5593781 cycles, 82.808 cycles/byte (slope)
+    2048 bytes:    207127 cycles, 101.136 cycles/byte
+    2580 bytes:    250987 cycles, 97.282 cycles/byte
+    3251 bytes:    305828 cycles, 94.072 cycles/byte
+    4096 bytes:    373114 cycles, 91.092 cycles/byte
+    5161 bytes:    454817 cycles, 88.126 cycles/byte
+    6502 bytes:    567424 cycles, 87.269 cycles/byte
+    8192 bytes:    699175 cycles, 85.349 cycles/byte
+   10321 bytes:    881143 cycles, 85.374 cycles/byte
+   13004 bytes:   1105611 cycles, 85.021 cycles/byte
+   16384 bytes:   1377134 cycles, 84.054 cycles/byte
+   20643 bytes:   1742703 cycles, 84.421 cycles/byte
+   26008 bytes:   2180827 cycles, 83.852 cycles/byte
+   32768 bytes:   2729281 cycles, 83.291 cycles/byte
+   41285 bytes:   3445864 cycles, 83.465 cycles/byte
+   52016 bytes:   4348055 cycles, 83.591 cycles/byte
+   65536 bytes:   5459209 cycles, 83.301 cycles/byte
+   82570 bytes:   6869835 cycles, 83.200 cycles/byte
+  104032 bytes:   8647763 cycles, 83.126 cycles/byte
+  131072 bytes:  10873097 cycles, 82.955 cycles/byte
+  165140 bytes:  13755821 cycles, 83.298 cycles/byte
+  208064 bytes:  17322761 cycles, 83.257 cycles/byte
+  262144 bytes:  21706177 cycles, 82.802 cycles/byte
+  330281 bytes:  27360853 cycles, 82.841 cycles/byte
+  416128 bytes:  34391543 cycles, 82.647 cycles/byte
+  524288 bytes:  43482734 cycles, 82.937 cycles/byte
+
+
+*** ParallelHash256 ***
+Using Keccak-f[1600] implementations:
+- ×1: 64-bit reference implementation
+- ×2: not used
+- ×4: not used
+- ×8: not used
+
+Block size: 8192 bytes
+    1625 bytes:    193697 cycles, 119.198 cycles/byte
+     +1 block:    1045907 cycles, 104.030 cycles/byte (slope)
+     +2 blocks:   1874827 cycles, 102.608 cycles/byte (slope)
+     +4 blocks:   3576663 cycles, 103.240 cycles/byte (slope)
+     +8 blocks:   6958949 cycles, 103.230 cycles/byte (slope)
+    2048 bytes:    249967 cycles, 122.054 cycles/byte
+    2580 bytes:    291617 cycles, 113.030 cycles/byte
+    3251 bytes:    357441 cycles, 109.948 cycles/byte
+    4096 bytes:    453151 cycles, 110.633 cycles/byte
+    5161 bytes:    549167 cycles, 106.407 cycles/byte
+    6502 bytes:    688261 cycles, 105.854 cycles/byte
+    8192 bytes:    865299 cycles, 105.627 cycles/byte
+   10321 bytes:   1098675 cycles, 106.450 cycles/byte
+   13004 bytes:   1368057 cycles, 105.203 cycles/byte
+   16384 bytes:   1711967 cycles, 104.490 cycles/byte
+   20643 bytes:   2146589 cycles, 103.986 cycles/byte
+   26008 bytes:   2690589 cycles, 103.452 cycles/byte
+   32768 bytes:   3378851 cycles, 103.114 cycles/byte
+   41285 bytes:   4257241 cycles, 103.118 cycles/byte
+   52016 bytes:   5398145 cycles, 103.779 cycles/byte
+   65536 bytes:   6788643 cycles, 103.586 cycles/byte
+   82570 bytes:   8548823 cycles, 103.534 cycles/byte
+  104032 bytes:  10769295 cycles, 103.519 cycles/byte
+  131072 bytes:  13496911 cycles, 102.973 cycles/byte
+  165140 bytes:  17044777 cycles, 103.214 cycles/byte
+  208064 bytes:  21418197 cycles, 102.940 cycles/byte
+  262144 bytes:  27146959 cycles, 103.557 cycles/byte
+  330281 bytes:  34114919 cycles, 103.291 cycles/byte
+  416128 bytes:  43050323 cycles, 103.455 cycles/byte
+  524288 bytes:  54114229 cycles, 103.215 cycles/byte
+
+
+*** KangarooTwelve ***
+Using Keccak-p[1600,12] implementations:
+- ×1: 64-bit reference implementation
+- ×2: not used
+- ×4: not used
+- ×8: not used
+
+KT128
+    1625 bytes:     71092 cycles, 43.749 cycles/byte
+    2048 bytes:     92241 cycles, 45.040 cycles/byte
+    2580 bytes:    113185 cycles, 43.870 cycles/byte
+    3251 bytes:    141609 cycles, 43.559 cycles/byte
+    4096 bytes:    176799 cycles, 43.164 cycles/byte
+    5161 bytes:    219809 cycles, 42.590 cycles/byte
+    6502 bytes:    276826 cycles, 42.576 cycles/byte
+    8192 bytes:    358971 cycles, 43.820 cycles/byte
+     +1 block:     703934 cycles, 42.110 cycles/byte (slope)
+     +2 blocks:   1051177 cycles, 42.249 cycles/byte (slope)
+     +4 blocks:   1750829 cycles, 42.476 cycles/byte (slope)
+     +8 blocks:   3129630 cycles, 42.277 cycles/byte (slope)
+   +168 blocks:  58673867 cycles, 42.372 cycles/byte (slope)
+   12288 bytes:    529038 cycles, 43.053 cycles/byte
+   13353 bytes:    571471 cycles, 42.797 cycles/byte
+   14694 bytes:    627639 cycles, 42.714 cycles/byte
+   16384 bytes:    705499 cycles, 43.060 cycles/byte
+   18513 bytes:    789683 cycles, 42.656 cycles/byte
+   21196 bytes:    903480 cycles, 42.625 cycles/byte
+   24576 bytes:   1051075 cycles, 42.768 cycles/byte
+   28835 bytes:   1228895 cycles, 42.618 cycles/byte
+   34200 bytes:   1455471 cycles, 42.558 cycles/byte
+   40960 bytes:   1745695 cycles, 42.620 cycles/byte
+   49477 bytes:   2105891 cycles, 42.563 cycles/byte
+   60208 bytes:   2581449 cycles, 42.876 cycles/byte
+   73728 bytes:   3144047 cycles, 42.644 cycles/byte
+   90762 bytes:   3854511 cycles, 42.468 cycles/byte
+  112224 bytes:   4760883 cycles, 42.423 cycles/byte
+  139264 bytes:   5946803 cycles, 42.702 cycles/byte
+  173332 bytes:   7340633 cycles, 42.350 cycles/byte
+  216256 bytes:   9188226 cycles, 42.488 cycles/byte
+  270336 bytes:  11408086 cycles, 42.200 cycles/byte
+  338473 bytes:  14327599 cycles, 42.330 cycles/byte
+  424320 bytes:  18015272 cycles, 42.457 cycles/byte
+  532480 bytes:  22566615 cycles, 42.380 cycles/byte
+  668753 bytes:  28431887 cycles, 42.515 cycles/byte
+  840447 bytes:  35750931 cycles, 42.538 cycles/byte
+ 1056768 bytes:  44865277 cycles, 42.455 cycles/byte
+
+
+KT256
+    1625 bytes:     85067 cycles, 52.349 cycles/byte
+    2048 bytes:    113219 cycles, 55.283 cycles/byte
+    2580 bytes:    135081 cycles, 52.357 cycles/byte
+    3251 bytes:    168944 cycles, 51.967 cycles/byte
+    4096 bytes:    218517 cycles, 53.349 cycles/byte
+    5161 bytes:    267443 cycles, 51.820 cycles/byte
+    6502 bytes:    338231 cycles, 52.020 cycles/byte
+    8192 bytes:    436660 cycles, 53.303 cycles/byte
+     +1 block:     866114 cycles, 52.424 cycles/byte (slope)
+     +2 blocks:   1295263 cycles, 52.405 cycles/byte (slope)
+     +4 blocks:   2161719 cycles, 52.645 cycles/byte (slope)
+     +8 blocks:   3885757 cycles, 52.629 cycles/byte (slope)
+   +168 blocks:  73202882 cycles, 52.873 cycles/byte (slope)
+   12288 bytes:    647121 cycles, 52.663 cycles/byte
+   13353 bytes:    697645 cycles, 52.246 cycles/byte
+   14694 bytes:    768807 cycles, 52.321 cycles/byte
+   16384 bytes:    871249 cycles, 53.177 cycles/byte
+   18513 bytes:    979913 cycles, 52.931 cycles/byte
+   21196 bytes:   1115403 cycles, 52.623 cycles/byte
+   24576 bytes:   1302845 cycles, 53.013 cycles/byte
+   28835 bytes:   1518608 cycles, 52.665 cycles/byte
+   34200 bytes:   1811961 cycles, 52.981 cycles/byte
+   40960 bytes:   2166785 cycles, 52.900 cycles/byte
+   49477 bytes:   2613715 cycles, 52.827 cycles/byte
+   60208 bytes:   3201031 cycles, 53.166 cycles/byte
+   73728 bytes:   3909352 cycles, 53.024 cycles/byte
+   90762 bytes:   4795936 cycles, 52.841 cycles/byte
+  112224 bytes:   5910457 cycles, 52.667 cycles/byte
+  139264 bytes:   7349711 cycles, 52.775 cycles/byte
+  173332 bytes:   9143585 cycles, 52.752 cycles/byte
+  216256 bytes:  11406285 cycles, 52.744 cycles/byte
+  270336 bytes:  14297849 cycles, 52.889 cycles/byte
+  338473 bytes:  17822696 cycles, 52.656 cycles/byte
+  424320 bytes:  22353775 cycles, 52.681 cycles/byte
+  532480 bytes:  28039153 cycles, 52.658 cycles/byte
+  668753 bytes:  35189318 cycles, 52.619 cycles/byte
+  840447 bytes:  44288296 cycles, 52.696 cycles/byte
+ 1056768 bytes:  55625223 cycles, 52.637 cycles/byte
+
+
+*** Kravatte ***
+Using Keccak-p[1600,6] implementations:
+- ×1: 64-bit reference implementation
+- ×2: not used
+- ×4: not used
+- ×8: not used
+
+Kravatte Mask Derivation      4113 cycles
+
+Kra
+    4096 bytes:     87107 cycles, 21.266 cycles/byte
+       1 bytes:      4419 cycles, 4419.000 cycles/byte
+       2 bytes:      4419 cycles, 2209.500 cycles/byte
+       4 bytes:      4419 cycles, 1104.750 cycles/byte
+       8 bytes:      4418 cycles, 552.250 cycles/byte
+      16 bytes:      4419 cycles, 276.188 cycles/byte
+      32 bytes:      4453 cycles, 139.156 cycles/byte
+      64 bytes:      4487 cycles, 70.109 cycles/byte
+     128 bytes:      4589 cycles, 35.852 cycles/byte
+     199 bytes:      4725 cycles, 23.625 cycles/byte
+     399 bytes:      9349 cycles, 23.372 cycles/byte
+     599 bytes:     13565 cycles, 22.608 cycles/byte
+     799 bytes:     17679 cycles, 22.099 cycles/byte
+     999 bytes:     21759 cycles, 21.759 cycles/byte
+    1199 bytes:     25907 cycles, 21.589 cycles/byte
+    1399 bytes:     29953 cycles, 21.395 cycles/byte
+    1599 bytes:     34101 cycles, 21.313 cycles/byte
+    1799 bytes:     38045 cycles, 21.136 cycles/byte
+    1999 bytes:     42261 cycles, 21.131 cycles/byte
+    2199 bytes:     46545 cycles, 21.157 cycles/byte
+    2399 bytes:     50523 cycles, 21.051 cycles/byte
+    2599 bytes:     54671 cycles, 21.027 cycles/byte
+    2799 bytes:     58683 cycles, 20.958 cycles/byte
+    2999 bytes:     63137 cycles, 21.046 cycles/byte
+    3199 bytes:     66605 cycles, 20.814 cycles/byte
+    6399 bytes:    131239 cycles, 20.506 cycles/byte
+   12799 bytes:    261629 cycles, 20.440 cycles/byte
+   25599 bytes:    520641 cycles, 20.338 cycles/byte
+   51199 bytes:   1040603 cycles, 20.324 cycles/byte
+Slope    25600 bytes (128 blocks):    516392 cycles, 20.172 cycles/byte
+
+Vatte
+    4096 bytes:     83026 cycles, 20.270 cycles/byte
+       1 bytes:      8091 cycles, 8091.000 cycles/byte
+       2 bytes:      7989 cycles, 3994.500 cycles/byte
+       4 bytes:      8023 cycles, 2005.750 cycles/byte
+       8 bytes:      8023 cycles, 1002.875 cycles/byte
+      16 bytes:      8057 cycles, 503.562 cycles/byte
+      32 bytes:      8091 cycles, 252.844 cycles/byte
+      64 bytes:      8090 cycles, 126.406 cycles/byte
+     128 bytes:      8193 cycles, 64.008 cycles/byte
+     199 bytes:      8295 cycles, 41.475 cycles/byte
+     399 bytes:     12035 cycles, 30.087 cycles/byte
+     599 bytes:     15843 cycles, 26.405 cycles/byte
+     799 bytes:     19447 cycles, 24.309 cycles/byte
+     999 bytes:     23187 cycles, 23.187 cycles/byte
+    1199 bytes:     26893 cycles, 22.411 cycles/byte
+    1399 bytes:     30632 cycles, 21.880 cycles/byte
+    1599 bytes:     34509 cycles, 21.568 cycles/byte
+    1799 bytes:     38282 cycles, 21.268 cycles/byte
+    1999 bytes:     42159 cycles, 21.079 cycles/byte
+    2199 bytes:     45797 cycles, 20.817 cycles/byte
+    2399 bytes:     49435 cycles, 20.598 cycles/byte
+    2599 bytes:     53447 cycles, 20.557 cycles/byte
+    2799 bytes:     57017 cycles, 20.363 cycles/byte
+    2999 bytes:     60757 cycles, 20.252 cycles/byte
+    3199 bytes:     64735 cycles, 20.230 cycles/byte
+    6399 bytes:    124642 cycles, 19.475 cycles/byte
+   12799 bytes:    243473 cycles, 19.021 cycles/byte
+   25599 bytes:    480861 cycles, 18.784 cycles/byte
+   51199 bytes:    959071 cycles, 18.732 cycles/byte
+Slope    25600 bytes (128 blocks):    475763 cycles, 18.584 cycles/byte
+
+Kravatte_SANE Wrap (only plaintext input, no AD)
+    4096 bytes:    170713 cycles, 41.678 cycles/byte
+       1 bytes:     12749 cycles, 12749.000 cycles/byte
+       2 bytes:     12783 cycles, 6391.500 cycles/byte
+       4 bytes:     12919 cycles, 3229.750 cycles/byte
+       8 bytes:     12919 cycles, 1614.875 cycles/byte
+      16 bytes:     12919 cycles, 807.438 cycles/byte
+      32 bytes:     12919 cycles, 403.719 cycles/byte
+      64 bytes:     13055 cycles, 203.984 cycles/byte
+     128 bytes:     13191 cycles, 103.055 cycles/byte
+     199 bytes:     17407 cycles, 87.035 cycles/byte
+     399 bytes:     25805 cycles, 64.513 cycles/byte
+     599 bytes:     33659 cycles, 56.098 cycles/byte
+     799 bytes:     41615 cycles, 52.019 cycles/byte
+     999 bytes:     49026 cycles, 49.026 cycles/byte
+    1199 bytes:     57221 cycles, 47.684 cycles/byte
+    1399 bytes:     65279 cycles, 46.628 cycles/byte
+    1599 bytes:     72826 cycles, 45.516 cycles/byte
+    1799 bytes:     80647 cycles, 44.804 cycles/byte
+    1999 bytes:     88535 cycles, 44.267 cycles/byte
+    2199 bytes:     96865 cycles, 44.030 cycles/byte
+    2399 bytes:    104311 cycles, 43.463 cycles/byte
+    2599 bytes:    111757 cycles, 42.983 cycles/byte
+    2799 bytes:    119372 cycles, 42.633 cycles/byte
+    2999 bytes:    128587 cycles, 42.862 cycles/byte
+    3199 bytes:    135897 cycles, 42.468 cycles/byte
+    6399 bytes:    260030 cycles, 40.630 cycles/byte
+   12799 bytes:    511801 cycles, 39.984 cycles/byte
+   25599 bytes:   1016225 cycles, 39.696 cycles/byte
+   51199 bytes:   2016573 cycles, 39.386 cycles/byte
+Slope    25600 bytes (128 blocks):   1002864 cycles, 39.174 cycles/byte
+
+Kravatte_SANE MAC (only AD input, no plaintext)
+    4096 bytes:     96457 cycles, 23.549 cycles/byte
+       1 bytes:     12953 cycles, 12953.000 cycles/byte
+       2 bytes:     12953 cycles, 6476.500 cycles/byte
+       4 bytes:     12987 cycles, 3246.750 cycles/byte
+       8 bytes:     12986 cycles, 1623.250 cycles/byte
+      16 bytes:     12987 cycles, 811.688 cycles/byte
+      32 bytes:     13088 cycles, 409.000 cycles/byte
+      64 bytes:     13089 cycles, 204.516 cycles/byte
+     128 bytes:     13225 cycles, 103.320 cycles/byte
+     199 bytes:     13327 cycles, 66.635 cycles/byte
+     399 bytes:     18053 cycles, 45.133 cycles/byte
+     599 bytes:     22235 cycles, 37.058 cycles/byte
+     799 bytes:     26315 cycles, 32.894 cycles/byte
+     999 bytes:     30293 cycles, 30.293 cycles/byte
+    1199 bytes:     34542 cycles, 28.785 cycles/byte
+    1399 bytes:     38793 cycles, 27.709 cycles/byte
+    1599 bytes:     42974 cycles, 26.859 cycles/byte
+    1799 bytes:     47157 cycles, 26.198 cycles/byte
+    1999 bytes:     50999 cycles, 25.500 cycles/byte
+    2199 bytes:     55317 cycles, 25.144 cycles/byte
+    2399 bytes:     59260 cycles, 24.692 cycles/byte
+    2599 bytes:     63171 cycles, 24.297 cycles/byte
+    2799 bytes:     67489 cycles, 24.103 cycles/byte
+    2999 bytes:     71399 cycles, 23.800 cycles/byte
+    3199 bytes:     75479 cycles, 23.587 cycles/byte
+    6399 bytes:    141167 cycles, 22.057 cycles/byte
+   12799 bytes:    271727 cycles, 21.229 cycles/byte
+   25599 bytes:    533459 cycles, 20.838 cycles/byte
+   51199 bytes:   1052197 cycles, 20.551 cycles/byte
+Slope    25600 bytes (128 blocks):    519282 cycles, 20.284 cycles/byte
+
+Kravatte_SANSE
+    4096 bytes:    188019 cycles, 45.903 cycles/byte
+       1 bytes:     29986 cycles, 29986.000 cycles/byte
+       2 bytes:     29885 cycles, 14942.500 cycles/byte
+       4 bytes:     30123 cycles, 7530.750 cycles/byte
+       8 bytes:     30021 cycles, 3752.625 cycles/byte
+      16 bytes:     30293 cycles, 1893.312 cycles/byte
+      32 bytes:     30361 cycles, 948.781 cycles/byte
+      64 bytes:     30395 cycles, 474.922 cycles/byte
+     128 bytes:     30633 cycles, 239.320 cycles/byte
+     199 bytes:     30803 cycles, 154.015 cycles/byte
+     399 bytes:     39099 cycles, 97.748 cycles/byte
+     599 bytes:     47292 cycles, 78.820 cycles/byte
+     799 bytes:     55112 cycles, 68.890 cycles/byte
+     999 bytes:     63035 cycles, 63.035 cycles/byte
+    1199 bytes:     70481 cycles, 58.734 cycles/byte
+    1399 bytes:     78266 cycles, 55.904 cycles/byte
+    1599 bytes:     86903 cycles, 54.314 cycles/byte
+    1799 bytes:     93533 cycles, 51.963 cycles/byte
+    1999 bytes:    101863 cycles, 50.931 cycles/byte
+    2199 bytes:    109342 cycles, 49.701 cycles/byte
+    2399 bytes:    117843 cycles, 49.101 cycles/byte
+    2599 bytes:    125697 cycles, 48.345 cycles/byte
+    2799 bytes:    133857 cycles, 47.806 cycles/byte
+    2999 bytes:    141812 cycles, 47.271 cycles/byte
+    3199 bytes:    148579 cycles, 46.431 cycles/byte
+    6399 bytes:    274480 cycles, 42.888 cycles/byte
+   12799 bytes:    522647 cycles, 40.832 cycles/byte
+   25599 bytes:   1021223 cycles, 39.892 cycles/byte
+   51199 bytes:   2025379 cycles, 39.558 cycles/byte
+Slope    25600 bytes (128 blocks):    996744 cycles, 38.935 cycles/byte
+
+Kravatte_WBC (Tweak 128 bits)
+    2048 bytes:    160819 cycles, 78.525 cycles/byte
+    4096 bytes:    280193 cycles, 68.406 cycles/byte
+    8192 bytes:    516459 cycles, 63.044 cycles/byte
+   16384 bytes:   1005141 cycles, 61.349 cycles/byte
+       1 bytes:     38725 cycles, 38725.000 cycles/byte
+       2 bytes:     46511 cycles, 23255.500 cycles/byte
+       4 bytes:     46409 cycles, 11602.250 cycles/byte
+       8 bytes:     46647 cycles, 5830.875 cycles/byte
+      16 bytes:     46511 cycles, 2906.938 cycles/byte
+      32 bytes:     46579 cycles, 1455.594 cycles/byte
+      64 bytes:     47123 cycles, 736.297 cycles/byte
+     128 bytes:     47701 cycles, 372.664 cycles/byte
+     198 bytes:     47803 cycles, 239.015 cycles/byte
+     398 bytes:     48823 cycles, 122.058 cycles/byte
+     598 bytes:     62321 cycles, 103.868 cycles/byte
+     798 bytes:     75954 cycles, 94.942 cycles/byte
+     998 bytes:     86800 cycles, 86.800 cycles/byte
+    1198 bytes:    100401 cycles, 83.668 cycles/byte
+    1398 bytes:    112403 cycles, 80.288 cycles/byte
+    1598 bytes:    124813 cycles, 78.008 cycles/byte
+    1798 bytes:    134231 cycles, 74.573 cycles/byte
+    1998 bytes:    147389 cycles, 73.695 cycles/byte
+    2198 bytes:    159289 cycles, 72.404 cycles/byte
+    2398 bytes:    172175 cycles, 71.740 cycles/byte
+    2598 bytes:    182987 cycles, 70.380 cycles/byte
+    2798 bytes:    196247 cycles, 70.088 cycles/byte
+    2998 bytes:    207364 cycles, 69.121 cycles/byte
+    3198 bytes:    219571 cycles, 68.616 cycles/byte
+    6398 bytes:    409189 cycles, 63.936 cycles/byte
+   12798 bytes:    790703 cycles, 61.774 cycles/byte
+   25598 bytes:   1545809 cycles, 60.383 cycles/byte
+   51198 bytes:   3074041 cycles, 60.040 cycles/byte
+Slope    25600 bytes (128 blocks):   1514734 cycles, 59.169 cycles/byte
+
+

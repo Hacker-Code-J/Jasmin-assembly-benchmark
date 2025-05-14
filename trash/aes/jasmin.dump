@@ -1,0 +1,201 @@
+
+jasmin_aesni.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <_invaes>:
+   0:	48 89 e6             	mov    %rsp,%rsi
+   3:	48 8d 64 24 f0       	lea    -0x10(%rsp),%rsp
+   8:	48 83 e4 f0          	and    $0xfffffffffffffff0,%rsp
+   c:	c5 fa 6f d0          	vmovdqu %xmm0,%xmm2
+  10:	c5 e1 ef db          	vpxor  %xmm3,%xmm3,%xmm3
+  14:	c4 e3 79 df e0 01    	vaeskeygenassist $0x1,%xmm0,%xmm4
+  1a:	c5 f9 70 e4 ff       	vpshufd $0xff,%xmm4,%xmm4
+  1f:	c5 e0 c6 d8 10       	vshufps $0x10,%xmm0,%xmm3,%xmm3
+  24:	c5 f9 ef c3          	vpxor  %xmm3,%xmm0,%xmm0
+  28:	c5 e0 c6 e8 8c       	vshufps $0x8c,%xmm0,%xmm3,%xmm5
+  2d:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+  31:	c5 f9 ef c4          	vpxor  %xmm4,%xmm0,%xmm0
+  35:	66 0f 38 db d8       	aesimc %xmm0,%xmm3
+  3a:	c4 e3 79 df e0 02    	vaeskeygenassist $0x2,%xmm0,%xmm4
+  40:	c5 f9 70 e4 ff       	vpshufd $0xff,%xmm4,%xmm4
+  45:	c5 d0 c6 e8 10       	vshufps $0x10,%xmm0,%xmm5,%xmm5
+  4a:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+  4e:	c5 d0 c6 e8 8c       	vshufps $0x8c,%xmm0,%xmm5,%xmm5
+  53:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+  57:	c5 f9 ef c4          	vpxor  %xmm4,%xmm0,%xmm0
+  5b:	66 0f 38 db e0       	aesimc %xmm0,%xmm4
+  60:	c4 e3 79 df f0 04    	vaeskeygenassist $0x4,%xmm0,%xmm6
+  66:	c5 f9 70 f6 ff       	vpshufd $0xff,%xmm6,%xmm6
+  6b:	c5 d0 c6 e8 10       	vshufps $0x10,%xmm0,%xmm5,%xmm5
+  70:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+  74:	c5 d0 c6 f8 8c       	vshufps $0x8c,%xmm0,%xmm5,%xmm7
+  79:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+  7d:	c5 f9 ef c6          	vpxor  %xmm6,%xmm0,%xmm0
+  81:	66 0f 38 db e8       	aesimc %xmm0,%xmm5
+  86:	c4 e3 79 df f0 08    	vaeskeygenassist $0x8,%xmm0,%xmm6
+  8c:	c5 f9 70 f6 ff       	vpshufd $0xff,%xmm6,%xmm6
+  91:	c5 c0 c6 f8 10       	vshufps $0x10,%xmm0,%xmm7,%xmm7
+  96:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+  9a:	c5 c0 c6 f8 8c       	vshufps $0x8c,%xmm0,%xmm7,%xmm7
+  9f:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+  a3:	c5 f9 ef c6          	vpxor  %xmm6,%xmm0,%xmm0
+  a7:	66 0f 38 db f0       	aesimc %xmm0,%xmm6
+  ac:	c4 63 79 df c0 10    	vaeskeygenassist $0x10,%xmm0,%xmm8
+  b2:	c4 41 79 70 c0 ff    	vpshufd $0xff,%xmm8,%xmm8
+  b8:	c5 c0 c6 f8 10       	vshufps $0x10,%xmm0,%xmm7,%xmm7
+  bd:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+  c1:	c5 40 c6 c8 8c       	vshufps $0x8c,%xmm0,%xmm7,%xmm9
+  c6:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+  cb:	c4 c1 79 ef c0       	vpxor  %xmm8,%xmm0,%xmm0
+  d0:	66 0f 38 db f8       	aesimc %xmm0,%xmm7
+  d5:	c4 63 79 df c0 20    	vaeskeygenassist $0x20,%xmm0,%xmm8
+  db:	c4 41 79 70 c0 ff    	vpshufd $0xff,%xmm8,%xmm8
+  e1:	c5 30 c6 c8 10       	vshufps $0x10,%xmm0,%xmm9,%xmm9
+  e6:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+  eb:	c5 30 c6 c8 8c       	vshufps $0x8c,%xmm0,%xmm9,%xmm9
+  f0:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+  f5:	c4 c1 79 ef c0       	vpxor  %xmm8,%xmm0,%xmm0
+  fa:	66 44 0f 38 db c0    	aesimc %xmm0,%xmm8
+ 100:	c4 63 79 df d0 40    	vaeskeygenassist $0x40,%xmm0,%xmm10
+ 106:	c4 41 79 70 d2 ff    	vpshufd $0xff,%xmm10,%xmm10
+ 10c:	c5 30 c6 c8 10       	vshufps $0x10,%xmm0,%xmm9,%xmm9
+ 111:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+ 116:	c5 30 c6 d8 8c       	vshufps $0x8c,%xmm0,%xmm9,%xmm11
+ 11b:	c4 c1 79 ef c3       	vpxor  %xmm11,%xmm0,%xmm0
+ 120:	c4 c1 79 ef c2       	vpxor  %xmm10,%xmm0,%xmm0
+ 125:	66 44 0f 38 db c8    	aesimc %xmm0,%xmm9
+ 12b:	c4 63 79 df d0 80    	vaeskeygenassist $0x80,%xmm0,%xmm10
+ 131:	c4 41 79 70 d2 ff    	vpshufd $0xff,%xmm10,%xmm10
+ 137:	c5 20 c6 d8 10       	vshufps $0x10,%xmm0,%xmm11,%xmm11
+ 13c:	c4 41 79 ef e3       	vpxor  %xmm11,%xmm0,%xmm12
+ 141:	c4 c1 20 c6 c4 8c    	vshufps $0x8c,%xmm12,%xmm11,%xmm0
+ 147:	c5 19 ef d8          	vpxor  %xmm0,%xmm12,%xmm11
+ 14b:	c4 41 21 ef e2       	vpxor  %xmm10,%xmm11,%xmm12
+ 150:	66 45 0f 38 db d4    	aesimc %xmm12,%xmm10
+ 156:	c4 43 79 df dc 1b    	vaeskeygenassist $0x1b,%xmm12,%xmm11
+ 15c:	c4 41 79 70 db ff    	vpshufd $0xff,%xmm11,%xmm11
+ 162:	c4 c1 78 c6 c4 10    	vshufps $0x10,%xmm12,%xmm0,%xmm0
+ 168:	c5 19 ef e0          	vpxor  %xmm0,%xmm12,%xmm12
+ 16c:	c4 c1 78 c6 c4 8c    	vshufps $0x8c,%xmm12,%xmm0,%xmm0
+ 172:	c5 19 ef e0          	vpxor  %xmm0,%xmm12,%xmm12
+ 176:	c4 41 19 ef eb       	vpxor  %xmm11,%xmm12,%xmm13
+ 17b:	66 45 0f 38 db dd    	aesimc %xmm13,%xmm11
+ 181:	c4 43 79 df e5 36    	vaeskeygenassist $0x36,%xmm13,%xmm12
+ 187:	c4 41 79 70 e4 ff    	vpshufd $0xff,%xmm12,%xmm12
+ 18d:	c4 c1 78 c6 c5 10    	vshufps $0x10,%xmm13,%xmm0,%xmm0
+ 193:	c5 11 ef e8          	vpxor  %xmm0,%xmm13,%xmm13
+ 197:	c4 c1 78 c6 c5 8c    	vshufps $0x8c,%xmm13,%xmm0,%xmm0
+ 19d:	c5 91 ef c0          	vpxor  %xmm0,%xmm13,%xmm0
+ 1a1:	c4 c1 79 ef c4       	vpxor  %xmm12,%xmm0,%xmm0
+ 1a6:	c5 fa 7f 04 24       	vmovdqu %xmm0,(%rsp)
+ 1ab:	c5 f1 ef 04 24       	vpxor  (%rsp),%xmm1,%xmm0
+ 1b0:	66 41 0f 38 de c3    	aesdec %xmm11,%xmm0
+ 1b6:	66 41 0f 38 de c2    	aesdec %xmm10,%xmm0
+ 1bc:	66 41 0f 38 de c1    	aesdec %xmm9,%xmm0
+ 1c2:	66 41 0f 38 de c0    	aesdec %xmm8,%xmm0
+ 1c8:	66 0f 38 de c7       	aesdec %xmm7,%xmm0
+ 1cd:	66 0f 38 de c6       	aesdec %xmm6,%xmm0
+ 1d2:	66 0f 38 de c5       	aesdec %xmm5,%xmm0
+ 1d7:	66 0f 38 de c4       	aesdec %xmm4,%xmm0
+ 1dc:	66 0f 38 de c3       	aesdec %xmm3,%xmm0
+ 1e1:	66 0f 38 df c2       	aesdeclast %xmm2,%xmm0
+ 1e6:	48 89 f4             	mov    %rsi,%rsp
+ 1e9:	c3                   	ret    
+
+00000000000001ea <_aes>:
+ 1ea:	c5 fa 6f d0          	vmovdqu %xmm0,%xmm2
+ 1ee:	c5 e1 ef db          	vpxor  %xmm3,%xmm3,%xmm3
+ 1f2:	c4 e3 79 df e0 01    	vaeskeygenassist $0x1,%xmm0,%xmm4
+ 1f8:	c5 f9 70 e4 ff       	vpshufd $0xff,%xmm4,%xmm4
+ 1fd:	c5 e0 c6 d8 10       	vshufps $0x10,%xmm0,%xmm3,%xmm3
+ 202:	c5 f9 ef c3          	vpxor  %xmm3,%xmm0,%xmm0
+ 206:	c5 e0 c6 e8 8c       	vshufps $0x8c,%xmm0,%xmm3,%xmm5
+ 20b:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+ 20f:	c5 f9 ef c4          	vpxor  %xmm4,%xmm0,%xmm0
+ 213:	c5 fa 6f d8          	vmovdqu %xmm0,%xmm3
+ 217:	c4 e3 79 df e0 02    	vaeskeygenassist $0x2,%xmm0,%xmm4
+ 21d:	c5 f9 70 e4 ff       	vpshufd $0xff,%xmm4,%xmm4
+ 222:	c5 d0 c6 e8 10       	vshufps $0x10,%xmm0,%xmm5,%xmm5
+ 227:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+ 22b:	c5 d0 c6 e8 8c       	vshufps $0x8c,%xmm0,%xmm5,%xmm5
+ 230:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+ 234:	c5 f9 ef c4          	vpxor  %xmm4,%xmm0,%xmm0
+ 238:	c5 fa 6f e0          	vmovdqu %xmm0,%xmm4
+ 23c:	c4 e3 79 df f0 04    	vaeskeygenassist $0x4,%xmm0,%xmm6
+ 242:	c5 f9 70 f6 ff       	vpshufd $0xff,%xmm6,%xmm6
+ 247:	c5 d0 c6 e8 10       	vshufps $0x10,%xmm0,%xmm5,%xmm5
+ 24c:	c5 f9 ef c5          	vpxor  %xmm5,%xmm0,%xmm0
+ 250:	c5 d0 c6 f8 8c       	vshufps $0x8c,%xmm0,%xmm5,%xmm7
+ 255:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+ 259:	c5 f9 ef c6          	vpxor  %xmm6,%xmm0,%xmm0
+ 25d:	c5 fa 6f e8          	vmovdqu %xmm0,%xmm5
+ 261:	c4 e3 79 df f0 08    	vaeskeygenassist $0x8,%xmm0,%xmm6
+ 267:	c5 f9 70 f6 ff       	vpshufd $0xff,%xmm6,%xmm6
+ 26c:	c5 c0 c6 f8 10       	vshufps $0x10,%xmm0,%xmm7,%xmm7
+ 271:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+ 275:	c5 c0 c6 f8 8c       	vshufps $0x8c,%xmm0,%xmm7,%xmm7
+ 27a:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+ 27e:	c5 f9 ef c6          	vpxor  %xmm6,%xmm0,%xmm0
+ 282:	c5 fa 6f f0          	vmovdqu %xmm0,%xmm6
+ 286:	c4 63 79 df c0 10    	vaeskeygenassist $0x10,%xmm0,%xmm8
+ 28c:	c4 41 79 70 c0 ff    	vpshufd $0xff,%xmm8,%xmm8
+ 292:	c5 c0 c6 f8 10       	vshufps $0x10,%xmm0,%xmm7,%xmm7
+ 297:	c5 f9 ef c7          	vpxor  %xmm7,%xmm0,%xmm0
+ 29b:	c5 40 c6 c8 8c       	vshufps $0x8c,%xmm0,%xmm7,%xmm9
+ 2a0:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+ 2a5:	c4 c1 79 ef c0       	vpxor  %xmm8,%xmm0,%xmm0
+ 2aa:	c5 fa 6f f8          	vmovdqu %xmm0,%xmm7
+ 2ae:	c4 63 79 df c0 20    	vaeskeygenassist $0x20,%xmm0,%xmm8
+ 2b4:	c4 41 79 70 c0 ff    	vpshufd $0xff,%xmm8,%xmm8
+ 2ba:	c5 30 c6 c8 10       	vshufps $0x10,%xmm0,%xmm9,%xmm9
+ 2bf:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+ 2c4:	c5 30 c6 c8 8c       	vshufps $0x8c,%xmm0,%xmm9,%xmm9
+ 2c9:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+ 2ce:	c4 c1 79 ef c0       	vpxor  %xmm8,%xmm0,%xmm0
+ 2d3:	c5 7a 6f c0          	vmovdqu %xmm0,%xmm8
+ 2d7:	c4 63 79 df d0 40    	vaeskeygenassist $0x40,%xmm0,%xmm10
+ 2dd:	c4 41 79 70 d2 ff    	vpshufd $0xff,%xmm10,%xmm10
+ 2e3:	c5 30 c6 c8 10       	vshufps $0x10,%xmm0,%xmm9,%xmm9
+ 2e8:	c4 c1 79 ef c1       	vpxor  %xmm9,%xmm0,%xmm0
+ 2ed:	c5 30 c6 d8 8c       	vshufps $0x8c,%xmm0,%xmm9,%xmm11
+ 2f2:	c4 c1 79 ef c3       	vpxor  %xmm11,%xmm0,%xmm0
+ 2f7:	c4 c1 79 ef c2       	vpxor  %xmm10,%xmm0,%xmm0
+ 2fc:	c5 7a 6f c8          	vmovdqu %xmm0,%xmm9
+ 300:	c4 63 79 df d0 80    	vaeskeygenassist $0x80,%xmm0,%xmm10
+ 306:	c4 41 79 70 d2 ff    	vpshufd $0xff,%xmm10,%xmm10
+ 30c:	c5 20 c6 d8 10       	vshufps $0x10,%xmm0,%xmm11,%xmm11
+ 311:	c4 41 79 ef e3       	vpxor  %xmm11,%xmm0,%xmm12
+ 316:	c4 c1 20 c6 c4 8c    	vshufps $0x8c,%xmm12,%xmm11,%xmm0
+ 31c:	c5 19 ef d8          	vpxor  %xmm0,%xmm12,%xmm11
+ 320:	c4 41 21 ef e2       	vpxor  %xmm10,%xmm11,%xmm12
+ 325:	c4 41 7a 6f d4       	vmovdqu %xmm12,%xmm10
+ 32a:	c4 43 79 df dc 1b    	vaeskeygenassist $0x1b,%xmm12,%xmm11
+ 330:	c4 41 79 70 db ff    	vpshufd $0xff,%xmm11,%xmm11
+ 336:	c4 c1 78 c6 c4 10    	vshufps $0x10,%xmm12,%xmm0,%xmm0
+ 33c:	c5 19 ef e0          	vpxor  %xmm0,%xmm12,%xmm12
+ 340:	c4 c1 78 c6 c4 8c    	vshufps $0x8c,%xmm12,%xmm0,%xmm0
+ 346:	c5 19 ef e0          	vpxor  %xmm0,%xmm12,%xmm12
+ 34a:	c4 41 19 ef eb       	vpxor  %xmm11,%xmm12,%xmm13
+ 34f:	c4 41 7a 6f dd       	vmovdqu %xmm13,%xmm11
+ 354:	c4 43 79 df e5 36    	vaeskeygenassist $0x36,%xmm13,%xmm12
+ 35a:	c4 41 79 70 e4 ff    	vpshufd $0xff,%xmm12,%xmm12
+ 360:	c4 c1 78 c6 c5 10    	vshufps $0x10,%xmm13,%xmm0,%xmm0
+ 366:	c5 11 ef e8          	vpxor  %xmm0,%xmm13,%xmm13
+ 36a:	c4 c1 78 c6 c5 8c    	vshufps $0x8c,%xmm13,%xmm0,%xmm0
+ 370:	c5 91 ef c0          	vpxor  %xmm0,%xmm13,%xmm0
+ 374:	c4 c1 79 ef c4       	vpxor  %xmm12,%xmm0,%xmm0
+ 379:	c5 7a 6f e0          	vmovdqu %xmm0,%xmm12
+ 37d:	c5 f1 ef c2          	vpxor  %xmm2,%xmm1,%xmm0
+ 381:	66 0f 38 dc c3       	aesenc %xmm3,%xmm0
+ 386:	66 0f 38 dc c4       	aesenc %xmm4,%xmm0
+ 38b:	66 0f 38 dc c5       	aesenc %xmm5,%xmm0
+ 390:	66 0f 38 dc c6       	aesenc %xmm6,%xmm0
+ 395:	66 0f 38 dc c7       	aesenc %xmm7,%xmm0
+ 39a:	66 41 0f 38 dc c0    	aesenc %xmm8,%xmm0
+ 3a0:	66 41 0f 38 dc c1    	aesenc %xmm9,%xmm0
+ 3a6:	66 41 0f 38 dc c2    	aesenc %xmm10,%xmm0
+ 3ac:	66 41 0f 38 dc c3    	aesenc %xmm11,%xmm0
+ 3b2:	66 41 0f 38 dd c4    	aesenclast %xmm12,%xmm0
+ 3b8:	c3                   	ret    

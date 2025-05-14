@@ -1,0 +1,22 @@
+--- aesni-x86_64 ---
+pxor: 522
+movups: 513
+aesenc: 335
+aesdec: 294
+movdqu: 217
+lea: 197
+movdqa: 167
+nop: 164
+mov: 145
+xorps: 142
+--- jasmin_aesni ---
+add: 91
+vpxor: 64
+vshufps: 40
+vaeskeygenassist: 20
+vpshufd: 20
+vmovdqu: 13
+aesimc: 9
+aesdec: 9
+aesenc: 9
+ret: 2

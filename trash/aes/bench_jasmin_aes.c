@@ -1,4 +1,4 @@
-// gcc -std=c11 -O2 -Wall -maes -mssse3 -mavx bench_jasmin_aes.c jasmin_aes.S -o bench_jasmin_aes -lm
+// gcc -std=c11 -O2 -Wall -march=x86-64 -mavx2 bench_jasmin_aes.c jasmin_aes.S -o bench_jasmin_aes -lm
 // ./bench_jasmin_aes > jasmin_results.csv
 
 

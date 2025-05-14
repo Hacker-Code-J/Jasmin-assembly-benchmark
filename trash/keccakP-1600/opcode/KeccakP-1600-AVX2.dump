@@ -1,0 +1,872 @@
+
+KeccakP-1600-AVX2.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <KeccakP1600_Initialize>:
+   0:	c5 fd ef c0          	vpxor  %ymm0,%ymm0,%ymm0
+   4:	c5 fe 7f 07          	vmovdqu %ymm0,(%rdi)
+   8:	c5 fe 7f 47 20       	vmovdqu %ymm0,0x20(%rdi)
+   d:	c5 fe 7f 47 40       	vmovdqu %ymm0,0x40(%rdi)
+  12:	c5 fe 7f 47 60       	vmovdqu %ymm0,0x60(%rdi)
+  17:	c5 fe 7f 87 80 00 00 	vmovdqu %ymm0,0x80(%rdi)
+  1e:	00 
+  1f:	c5 fe 7f 87 a0 00 00 	vmovdqu %ymm0,0xa0(%rdi)
+  26:	00 
+  27:	48 c7 87 c0 00 00 00 	movq   $0x0,0xc0(%rdi)
+  2e:	00 00 00 00 
+  32:	c3                   	ret    
+
+0000000000000033 <KeccakP1600_AddByte>:
+  33:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  3a:	00 00 00 00 
+  3e:	66 90                	xchg   %ax,%ax
+  40:	48 89 d0             	mov    %rdx,%rax
+  43:	48 83 e0 07          	and    $0x7,%rax
+  47:	83 e2 f8             	and    $0xfffffff8,%edx
+  4a:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 51 <KeccakP1600_AddByte+0x1e>
+  51:	49 8b 14 11          	mov    (%r9,%rdx,1),%rdx
+  55:	48 01 d7             	add    %rdx,%rdi
+  58:	48 01 c7             	add    %rax,%rdi
+  5b:	40 30 37             	xor    %sil,(%rdi)
+  5e:	c3                   	ret    
+
+000000000000005f <KeccakP1600_AddBytes>:
+  5f:	90                   	nop
+  60:	48 83 f9 00          	cmp    $0x0,%rcx
+  64:	74 7e                	je     e4 <KeccakP1600_AddBytes_Exit>
+  66:	48 89 d0             	mov    %rdx,%rax
+  69:	83 e2 f8             	and    $0xfffffff8,%edx
+  6c:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 73 <KeccakP1600_AddBytes+0x14>
+  73:	4c 01 ca             	add    %r9,%rdx
+  76:	48 83 e0 07          	and    $0x7,%rax
+  7a:	74 45                	je     c1 <KeccakP1600_AddBytes_LaneAlignedCheck>
+  7c:	49 c7 c1 08 00 00 00 	mov    $0x8,%r9
+  83:	49 29 c1             	sub    %rax,%r9
+  86:	49 39 c9             	cmp    %rcx,%r9
+  89:	4c 0f 43 c9          	cmovae %rcx,%r9
+  8d:	4c 29 c9             	sub    %r9,%rcx
+  90:	48 03 02             	add    (%rdx),%rax
+  93:	48 83 c2 08          	add    $0x8,%rdx
+  97:	48 01 f8             	add    %rdi,%rax
+
+000000000000009a <KeccakP1600_AddBytes_NotAlignedLoop>:
+  9a:	44 8a 06             	mov    (%rsi),%r8b
+  9d:	48 ff c6             	inc    %rsi
+  a0:	44 30 00             	xor    %r8b,(%rax)
+  a3:	48 ff c0             	inc    %rax
+  a6:	49 ff c9             	dec    %r9
+  a9:	75 ef                	jne    9a <KeccakP1600_AddBytes_NotAlignedLoop>
+  ab:	eb 14                	jmp    c1 <KeccakP1600_AddBytes_LaneAlignedCheck>
+
+00000000000000ad <KeccakP1600_AddBytes_LaneAlignedLoop>:
+  ad:	4c 8b 06             	mov    (%rsi),%r8
+  b0:	48 83 c6 08          	add    $0x8,%rsi
+  b4:	48 8b 02             	mov    (%rdx),%rax
+  b7:	48 83 c2 08          	add    $0x8,%rdx
+  bb:	48 01 f8             	add    %rdi,%rax
+  be:	4c 31 00             	xor    %r8,(%rax)
+
+00000000000000c1 <KeccakP1600_AddBytes_LaneAlignedCheck>:
+  c1:	48 83 e9 08          	sub    $0x8,%rcx
+  c5:	73 e6                	jae    ad <KeccakP1600_AddBytes_LaneAlignedLoop>
+
+00000000000000c7 <KeccakP1600_AddBytes_LastIncompleteLane>:
+  c7:	48 83 c1 08          	add    $0x8,%rcx
+  cb:	74 17                	je     e4 <KeccakP1600_AddBytes_Exit>
+  cd:	48 8b 02             	mov    (%rdx),%rax
+  d0:	48 01 f8             	add    %rdi,%rax
+
+00000000000000d3 <KeccakP1600_AddBytes_LastIncompleteLaneLoop>:
+  d3:	44 8a 06             	mov    (%rsi),%r8b
+  d6:	48 ff c6             	inc    %rsi
+  d9:	44 30 00             	xor    %r8b,(%rax)
+  dc:	48 ff c0             	inc    %rax
+  df:	48 ff c9             	dec    %rcx
+  e2:	75 ef                	jne    d3 <KeccakP1600_AddBytes_LastIncompleteLaneLoop>
+
+00000000000000e4 <KeccakP1600_AddBytes_Exit>:
+  e4:	c3                   	ret    
+
+00000000000000e5 <KeccakP1600_OverwriteBytes>:
+  e5:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  ec:	00 00 00 00 
+  f0:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  f7:	00 00 00 00 
+  fb:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+ 100:	48 83 f9 00          	cmp    $0x0,%rcx
+ 104:	74 7e                	je     184 <KeccakP1600_OverwriteBytes_Exit>
+ 106:	48 89 d0             	mov    %rdx,%rax
+ 109:	83 e2 f8             	and    $0xfffffff8,%edx
+ 10c:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 113 <KeccakP1600_OverwriteBytes+0x2e>
+ 113:	4c 01 ca             	add    %r9,%rdx
+ 116:	48 83 e0 07          	and    $0x7,%rax
+ 11a:	74 45                	je     161 <KeccakP1600_OverwriteBytes_LaneAlignedCheck>
+ 11c:	49 c7 c1 08 00 00 00 	mov    $0x8,%r9
+ 123:	49 29 c1             	sub    %rax,%r9
+ 126:	49 39 c9             	cmp    %rcx,%r9
+ 129:	4c 0f 43 c9          	cmovae %rcx,%r9
+ 12d:	4c 29 c9             	sub    %r9,%rcx
+ 130:	48 03 02             	add    (%rdx),%rax
+ 133:	48 83 c2 08          	add    $0x8,%rdx
+ 137:	48 01 f8             	add    %rdi,%rax
+
+000000000000013a <KeccakP1600_OverwriteBytes_NotAlignedLoop>:
+ 13a:	44 8a 06             	mov    (%rsi),%r8b
+ 13d:	48 ff c6             	inc    %rsi
+ 140:	44 88 00             	mov    %r8b,(%rax)
+ 143:	48 ff c0             	inc    %rax
+ 146:	49 ff c9             	dec    %r9
+ 149:	75 ef                	jne    13a <KeccakP1600_OverwriteBytes_NotAlignedLoop>
+ 14b:	eb 14                	jmp    161 <KeccakP1600_OverwriteBytes_LaneAlignedCheck>
+
+000000000000014d <KeccakP1600_OverwriteBytes_LaneAlignedLoop>:
+ 14d:	4c 8b 06             	mov    (%rsi),%r8
+ 150:	48 83 c6 08          	add    $0x8,%rsi
+ 154:	48 8b 02             	mov    (%rdx),%rax
+ 157:	48 83 c2 08          	add    $0x8,%rdx
+ 15b:	48 01 f8             	add    %rdi,%rax
+ 15e:	4c 89 00             	mov    %r8,(%rax)
+
+0000000000000161 <KeccakP1600_OverwriteBytes_LaneAlignedCheck>:
+ 161:	48 83 e9 08          	sub    $0x8,%rcx
+ 165:	73 e6                	jae    14d <KeccakP1600_OverwriteBytes_LaneAlignedLoop>
+
+0000000000000167 <KeccakP1600_OverwriteBytes_LastIncompleteLane>:
+ 167:	48 83 c1 08          	add    $0x8,%rcx
+ 16b:	74 17                	je     184 <KeccakP1600_OverwriteBytes_Exit>
+ 16d:	48 8b 02             	mov    (%rdx),%rax
+ 170:	48 01 f8             	add    %rdi,%rax
+
+0000000000000173 <KeccakP1600_OverwriteBytes_LastIncompleteLaneLoop>:
+ 173:	44 8a 06             	mov    (%rsi),%r8b
+ 176:	48 ff c6             	inc    %rsi
+ 179:	44 88 00             	mov    %r8b,(%rax)
+ 17c:	48 ff c0             	inc    %rax
+ 17f:	48 ff c9             	dec    %rcx
+ 182:	75 ef                	jne    173 <KeccakP1600_OverwriteBytes_LastIncompleteLaneLoop>
+
+0000000000000184 <KeccakP1600_OverwriteBytes_Exit>:
+ 184:	c3                   	ret    
+
+0000000000000185 <KeccakP1600_OverwriteWithZeroes>:
+ 185:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 18c:	00 00 00 00 
+ 190:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 197:	00 00 00 00 
+ 19b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+ 1a0:	48 83 fe 00          	cmp    $0x0,%rsi
+ 1a4:	74 37                	je     1dd <KeccakP1600_OverwriteWithZeroes_Exit>
+ 1a6:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # 1ad <KeccakP1600_OverwriteWithZeroes+0x28>
+ 1ad:	eb 11                	jmp    1c0 <KeccakP1600_OverwriteWithZeroes_LaneAlignedCheck>
+
+00000000000001af <KeccakP1600_OverwriteWithZeroes_LaneAlignedLoop>:
+ 1af:	48 8b 02             	mov    (%rdx),%rax
+ 1b2:	48 83 c2 08          	add    $0x8,%rdx
+ 1b6:	48 01 f8             	add    %rdi,%rax
+ 1b9:	48 c7 00 00 00 00 00 	movq   $0x0,(%rax)
+
+00000000000001c0 <KeccakP1600_OverwriteWithZeroes_LaneAlignedCheck>:
+ 1c0:	48 83 ee 08          	sub    $0x8,%rsi
+ 1c4:	73 e9                	jae    1af <KeccakP1600_OverwriteWithZeroes_LaneAlignedLoop>
+
+00000000000001c6 <KeccakP1600_OverwriteWithZeroes_LastIncompleteLane>:
+ 1c6:	48 83 c6 08          	add    $0x8,%rsi
+ 1ca:	74 11                	je     1dd <KeccakP1600_OverwriteWithZeroes_Exit>
+ 1cc:	48 8b 02             	mov    (%rdx),%rax
+ 1cf:	48 01 f8             	add    %rdi,%rax
+
+00000000000001d2 <KeccakP1600_OverwriteWithZeroes_LastIncompleteLaneLoop>:
+ 1d2:	c6 00 00             	movb   $0x0,(%rax)
+ 1d5:	48 ff c0             	inc    %rax
+ 1d8:	48 ff ce             	dec    %rsi
+ 1db:	75 f5                	jne    1d2 <KeccakP1600_OverwriteWithZeroes_LastIncompleteLaneLoop>
+
+00000000000001dd <KeccakP1600_OverwriteWithZeroes_Exit>:
+ 1dd:	c3                   	ret    
+
+00000000000001de <KeccakP1600_ExtractBytes>:
+ 1de:	66 90                	xchg   %ax,%ax
+ 1e0:	53                   	push   %rbx
+ 1e1:	48 83 f9 00          	cmp    $0x0,%rcx
+ 1e5:	0f 84 82 00 00 00    	je     26d <KeccakP1600_ExtractBytes_Exit>
+ 1eb:	48 89 d0             	mov    %rdx,%rax
+ 1ee:	83 e2 f8             	and    $0xfffffff8,%edx
+ 1f1:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 1f8 <KeccakP1600_ExtractBytes+0x1a>
+ 1f8:	4c 01 ca             	add    %r9,%rdx
+ 1fb:	48 83 e0 07          	and    $0x7,%rax
+ 1ff:	74 48                	je     249 <KeccakP1600_ExtractBytes_LaneAlignedCheck>
+ 201:	48 c7 c3 08 00 00 00 	mov    $0x8,%rbx
+ 208:	48 29 c3             	sub    %rax,%rbx
+ 20b:	48 39 cb             	cmp    %rcx,%rbx
+ 20e:	48 0f 43 d9          	cmovae %rcx,%rbx
+ 212:	48 29 d9             	sub    %rbx,%rcx
+ 215:	4c 8b 0a             	mov    (%rdx),%r9
+ 218:	48 83 c2 08          	add    $0x8,%rdx
+ 21c:	49 01 f9             	add    %rdi,%r9
+ 21f:	49 01 c1             	add    %rax,%r9
+
+0000000000000222 <KeccakP1600_ExtractBytes_NotAlignedLoop>:
+ 222:	45 8a 01             	mov    (%r9),%r8b
+ 225:	49 ff c1             	inc    %r9
+ 228:	44 88 06             	mov    %r8b,(%rsi)
+ 22b:	48 ff c6             	inc    %rsi
+ 22e:	48 ff cb             	dec    %rbx
+ 231:	75 ef                	jne    222 <KeccakP1600_ExtractBytes_NotAlignedLoop>
+ 233:	eb 14                	jmp    249 <KeccakP1600_ExtractBytes_LaneAlignedCheck>
+
+0000000000000235 <KeccakP1600_ExtractBytes_LaneAlignedLoop>:
+ 235:	48 8b 02             	mov    (%rdx),%rax
+ 238:	48 83 c2 08          	add    $0x8,%rdx
+ 23c:	48 01 f8             	add    %rdi,%rax
+ 23f:	4c 8b 00             	mov    (%rax),%r8
+ 242:	4c 89 06             	mov    %r8,(%rsi)
+ 245:	48 83 c6 08          	add    $0x8,%rsi
+
+0000000000000249 <KeccakP1600_ExtractBytes_LaneAlignedCheck>:
+ 249:	48 83 e9 08          	sub    $0x8,%rcx
+ 24d:	73 e6                	jae    235 <KeccakP1600_ExtractBytes_LaneAlignedLoop>
+
+000000000000024f <KeccakP1600_ExtractBytes_LastIncompleteLane>:
+ 24f:	48 83 c1 08          	add    $0x8,%rcx
+ 253:	74 18                	je     26d <KeccakP1600_ExtractBytes_Exit>
+ 255:	48 8b 02             	mov    (%rdx),%rax
+ 258:	48 01 f8             	add    %rdi,%rax
+ 25b:	4c 8b 00             	mov    (%rax),%r8
+
+000000000000025e <KeccakP1600_ExtractBytes_LastIncompleteLaneLoop>:
+ 25e:	44 88 06             	mov    %r8b,(%rsi)
+ 261:	49 c1 e8 08          	shr    $0x8,%r8
+ 265:	48 ff c6             	inc    %rsi
+ 268:	48 ff c9             	dec    %rcx
+ 26b:	75 f1                	jne    25e <KeccakP1600_ExtractBytes_LastIncompleteLaneLoop>
+
+000000000000026d <KeccakP1600_ExtractBytes_Exit>:
+ 26d:	5b                   	pop    %rbx
+ 26e:	c3                   	ret    
+
+000000000000026f <KeccakP1600_ExtractAndAddBytes>:
+ 26f:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 276:	00 00 00 00 
+ 27a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 280:	53                   	push   %rbx
+ 281:	41 52                	push   %r10
+ 283:	49 83 f8 00          	cmp    $0x0,%r8
+ 287:	0f 84 95 00 00 00    	je     322 <KeccakP1600_ExtractAndAddBytes_Exit>
+ 28d:	48 89 c8             	mov    %rcx,%rax
+ 290:	83 e1 f8             	and    $0xfffffff8,%ecx
+ 293:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 29a <KeccakP1600_ExtractAndAddBytes+0x2b>
+ 29a:	4c 01 c9             	add    %r9,%rcx
+ 29d:	48 83 e0 07          	and    $0x7,%rax
+ 2a1:	74 55                	je     2f8 <KeccakP1600_ExtractAndAddBytes_LaneAlignedCheck>
+ 2a3:	48 c7 c3 08 00 00 00 	mov    $0x8,%rbx
+ 2aa:	48 29 c3             	sub    %rax,%rbx
+ 2ad:	4c 39 c3             	cmp    %r8,%rbx
+ 2b0:	49 0f 43 d8          	cmovae %r8,%rbx
+ 2b4:	49 29 d8             	sub    %rbx,%r8
+ 2b7:	4c 8b 09             	mov    (%rcx),%r9
+ 2ba:	48 83 c1 08          	add    $0x8,%rcx
+ 2be:	49 01 f9             	add    %rdi,%r9
+ 2c1:	49 01 c1             	add    %rax,%r9
+
+00000000000002c4 <KeccakP1600_ExtractAndAddBytes_NotAlignedLoop>:
+ 2c4:	45 8a 11             	mov    (%r9),%r10b
+ 2c7:	49 ff c1             	inc    %r9
+ 2ca:	44 32 16             	xor    (%rsi),%r10b
+ 2cd:	48 ff c6             	inc    %rsi
+ 2d0:	44 88 12             	mov    %r10b,(%rdx)
+ 2d3:	48 ff c2             	inc    %rdx
+ 2d6:	48 ff cb             	dec    %rbx
+ 2d9:	75 e9                	jne    2c4 <KeccakP1600_ExtractAndAddBytes_NotAlignedLoop>
+ 2db:	eb 1b                	jmp    2f8 <KeccakP1600_ExtractAndAddBytes_LaneAlignedCheck>
+
+00000000000002dd <KeccakP1600_ExtractAndAddBytes_LaneAlignedLoop>:
+ 2dd:	48 8b 01             	mov    (%rcx),%rax
+ 2e0:	48 83 c1 08          	add    $0x8,%rcx
+ 2e4:	48 01 f8             	add    %rdi,%rax
+ 2e7:	4c 8b 10             	mov    (%rax),%r10
+ 2ea:	4c 33 16             	xor    (%rsi),%r10
+ 2ed:	48 83 c6 08          	add    $0x8,%rsi
+ 2f1:	4c 89 12             	mov    %r10,(%rdx)
+ 2f4:	48 83 c2 08          	add    $0x8,%rdx
+
+00000000000002f8 <KeccakP1600_ExtractAndAddBytes_LaneAlignedCheck>:
+ 2f8:	49 83 e8 08          	sub    $0x8,%r8
+ 2fc:	73 df                	jae    2dd <KeccakP1600_ExtractAndAddBytes_LaneAlignedLoop>
+
+00000000000002fe <KeccakP1600_ExtractAndAddBytes_LastIncompleteLane>:
+ 2fe:	49 83 c0 08          	add    $0x8,%r8
+ 302:	74 1e                	je     322 <KeccakP1600_ExtractAndAddBytes_Exit>
+ 304:	48 8b 01             	mov    (%rcx),%rax
+ 307:	48 01 f8             	add    %rdi,%rax
+ 30a:	4c 8b 10             	mov    (%rax),%r10
+
+000000000000030d <KeccakP1600_ExtractAndAddBytes_LastIncompleteLaneLoop>:
+ 30d:	44 32 16             	xor    (%rsi),%r10b
+ 310:	48 ff c6             	inc    %rsi
+ 313:	44 88 12             	mov    %r10b,(%rdx)
+ 316:	48 ff c2             	inc    %rdx
+ 319:	49 c1 ea 08          	shr    $0x8,%r10
+ 31d:	49 ff c8             	dec    %r8
+ 320:	75 eb                	jne    30d <KeccakP1600_ExtractAndAddBytes_LastIncompleteLaneLoop>
+
+0000000000000322 <KeccakP1600_ExtractAndAddBytes_Exit>:
+ 322:	41 5a                	pop    %r10
+ 324:	5b                   	pop    %rbx
+ 325:	c3                   	ret    
+ 326:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 32d:	00 00 00 00 
+ 331:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 338:	00 00 00 00 
+ 33c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000000340 <__KeccakF1600>:
+ 340:	c5 7d 70 ea 4e       	vpshufd $0x4e,%ymm2,%ymm13
+ 345:	c5 55 ef e3          	vpxor  %ymm3,%ymm5,%ymm12
+ 349:	c5 5d ef ce          	vpxor  %ymm6,%ymm4,%ymm9
+ 34d:	c5 1d ef e1          	vpxor  %ymm1,%ymm12,%ymm12
+ 351:	c4 41 1d ef e1       	vpxor  %ymm9,%ymm12,%ymm12
+ 356:	c4 43 fd 00 dc 93    	vpermq $0x93,%ymm12,%ymm11
+ 35c:	c5 15 ef ea          	vpxor  %ymm2,%ymm13,%ymm13
+ 360:	c4 c3 fd 00 fd 4e    	vpermq $0x4e,%ymm13,%ymm7
+ 366:	c4 c1 3d 73 d4 3f    	vpsrlq $0x3f,%ymm12,%ymm8
+ 36c:	c4 41 1d d4 cc       	vpaddq %ymm12,%ymm12,%ymm9
+ 371:	c4 41 3d eb c1       	vpor   %ymm9,%ymm8,%ymm8
+ 376:	c4 43 fd 00 f8 39    	vpermq $0x39,%ymm8,%ymm15
+ 37c:	c4 41 3d ef f3       	vpxor  %ymm11,%ymm8,%ymm14
+ 381:	c4 43 fd 00 f6 00    	vpermq $0x0,%ymm14,%ymm14
+ 387:	c5 15 ef e8          	vpxor  %ymm0,%ymm13,%ymm13
+ 38b:	c5 15 ef ef          	vpxor  %ymm7,%ymm13,%ymm13
+ 38f:	c4 c1 45 73 d5 3f    	vpsrlq $0x3f,%ymm13,%ymm7
+ 395:	c4 41 15 d4 c5       	vpaddq %ymm13,%ymm13,%ymm8
+ 39a:	c5 3d eb c7          	vpor   %ymm7,%ymm8,%ymm8
+ 39e:	c4 c1 6d ef d6       	vpxor  %ymm14,%ymm2,%ymm2
+ 3a3:	c4 c1 7d ef c6       	vpxor  %ymm14,%ymm0,%ymm0
+ 3a8:	c4 43 05 02 f8 c0    	vpblendd $0xc0,%ymm8,%ymm15,%ymm15
+ 3ae:	c4 43 25 02 dd 03    	vpblendd $0x3,%ymm13,%ymm11,%ymm11
+ 3b4:	c4 41 05 ef fb       	vpxor  %ymm11,%ymm15,%ymm15
+ 3b9:	c4 42 ed 47 50 a0    	vpsllvq -0x60(%r8),%ymm2,%ymm10
+ 3bf:	c4 c2 ed 45 51 a0    	vpsrlvq -0x60(%r9),%ymm2,%ymm2
+ 3c5:	c4 c1 6d eb d2       	vpor   %ymm10,%ymm2,%ymm2
+ 3ca:	c4 c1 65 ef df       	vpxor  %ymm15,%ymm3,%ymm3
+ 3cf:	c4 42 e5 47 58 e0    	vpsllvq -0x20(%r8),%ymm3,%ymm11
+ 3d5:	c4 c2 e5 45 59 e0    	vpsrlvq -0x20(%r9),%ymm3,%ymm3
+ 3db:	c4 c1 65 eb db       	vpor   %ymm11,%ymm3,%ymm3
+ 3e0:	c4 c1 5d ef e7       	vpxor  %ymm15,%ymm4,%ymm4
+ 3e5:	c4 42 dd 47 20       	vpsllvq (%r8),%ymm4,%ymm12
+ 3ea:	c4 c2 dd 45 21       	vpsrlvq (%r9),%ymm4,%ymm4
+ 3ef:	c4 c1 5d eb e4       	vpor   %ymm12,%ymm4,%ymm4
+ 3f4:	c4 c1 55 ef ef       	vpxor  %ymm15,%ymm5,%ymm5
+ 3f9:	c4 42 d5 47 68 20    	vpsllvq 0x20(%r8),%ymm5,%ymm13
+ 3ff:	c4 c2 d5 45 69 20    	vpsrlvq 0x20(%r9),%ymm5,%ymm5
+ 405:	c4 c1 55 eb ed       	vpor   %ymm13,%ymm5,%ymm5
+ 40a:	c4 c1 4d ef f7       	vpxor  %ymm15,%ymm6,%ymm6
+ 40f:	c4 63 fd 00 d2 8d    	vpermq $0x8d,%ymm2,%ymm10
+ 415:	c4 63 fd 00 db 8d    	vpermq $0x8d,%ymm3,%ymm11
+ 41b:	c4 42 cd 47 70 40    	vpsllvq 0x40(%r8),%ymm6,%ymm14
+ 421:	c4 42 cd 45 41 40    	vpsrlvq 0x40(%r9),%ymm6,%ymm8
+ 427:	c4 41 3d eb c6       	vpor   %ymm14,%ymm8,%ymm8
+ 42c:	c4 c1 75 ef cf       	vpxor  %ymm15,%ymm1,%ymm1
+ 431:	c4 63 fd 00 e4 1b    	vpermq $0x1b,%ymm4,%ymm12
+ 437:	c4 63 fd 00 ed 72    	vpermq $0x72,%ymm5,%ymm13
+ 43d:	c4 42 f5 47 78 c0    	vpsllvq -0x40(%r8),%ymm1,%ymm15
+ 443:	c4 42 f5 45 49 c0    	vpsrlvq -0x40(%r9),%ymm1,%ymm9
+ 449:	c4 41 35 eb cf       	vpor   %ymm15,%ymm9,%ymm9
+ 44e:	c4 c1 0d 73 d8 08    	vpsrldq $0x8,%ymm8,%ymm14
+ 454:	c4 c1 3d df fe       	vpandn %ymm14,%ymm8,%ymm7
+ 459:	c4 c3 35 02 dd 0c    	vpblendd $0xc,%ymm13,%ymm9,%ymm3
+ 45f:	c4 43 25 02 f9 0c    	vpblendd $0xc,%ymm9,%ymm11,%ymm15
+ 465:	c4 c3 2d 02 eb 0c    	vpblendd $0xc,%ymm11,%ymm10,%ymm5
+ 46b:	c4 43 35 02 f2 0c    	vpblendd $0xc,%ymm10,%ymm9,%ymm14
+ 471:	c4 c3 65 02 db 30    	vpblendd $0x30,%ymm11,%ymm3,%ymm3
+ 477:	c4 43 05 02 fc 30    	vpblendd $0x30,%ymm12,%ymm15,%ymm15
+ 47d:	c4 c3 55 02 e9 30    	vpblendd $0x30,%ymm9,%ymm5,%ymm5
+ 483:	c4 43 0d 02 f5 30    	vpblendd $0x30,%ymm13,%ymm14,%ymm14
+ 489:	c4 c3 65 02 dc c0    	vpblendd $0xc0,%ymm12,%ymm3,%ymm3
+ 48f:	c4 43 05 02 fd c0    	vpblendd $0xc0,%ymm13,%ymm15,%ymm15
+ 495:	c4 c3 55 02 ed c0    	vpblendd $0xc0,%ymm13,%ymm5,%ymm5
+ 49b:	c4 43 0d 02 f3 c0    	vpblendd $0xc0,%ymm11,%ymm14,%ymm14
+ 4a1:	c4 c1 65 df df       	vpandn %ymm15,%ymm3,%ymm3
+ 4a6:	c4 c1 55 df ee       	vpandn %ymm14,%ymm5,%ymm5
+ 4ab:	c4 c3 1d 02 f1 0c    	vpblendd $0xc,%ymm9,%ymm12,%ymm6
+ 4b1:	c4 43 2d 02 fc 0c    	vpblendd $0xc,%ymm12,%ymm10,%ymm15
+ 4b7:	c4 c1 65 ef da       	vpxor  %ymm10,%ymm3,%ymm3
+ 4bc:	c4 c3 4d 02 f2 30    	vpblendd $0x30,%ymm10,%ymm6,%ymm6
+ 4c2:	c4 43 05 02 fb 30    	vpblendd $0x30,%ymm11,%ymm15,%ymm15
+ 4c8:	c4 c1 55 ef ec       	vpxor  %ymm12,%ymm5,%ymm5
+ 4cd:	c4 c3 4d 02 f3 c0    	vpblendd $0xc0,%ymm11,%ymm6,%ymm6
+ 4d3:	c4 43 05 02 f9 c0    	vpblendd $0xc0,%ymm9,%ymm15,%ymm15
+ 4d9:	c4 c1 4d df f7       	vpandn %ymm15,%ymm6,%ymm6
+ 4de:	c4 c1 4d ef f5       	vpxor  %ymm13,%ymm6,%ymm6
+ 4e3:	c4 c3 fd 00 e0 1e    	vpermq $0x1e,%ymm8,%ymm4
+ 4e9:	c4 63 5d 02 f8 30    	vpblendd $0x30,%ymm0,%ymm4,%ymm15
+ 4ef:	c4 c3 fd 00 c8 39    	vpermq $0x39,%ymm8,%ymm1
+ 4f5:	c4 e3 75 02 c8 c0    	vpblendd $0xc0,%ymm0,%ymm1,%ymm1
+ 4fb:	c4 c1 75 df cf       	vpandn %ymm15,%ymm1,%ymm1
+ 500:	c4 c3 25 02 d4 0c    	vpblendd $0xc,%ymm12,%ymm11,%ymm2
+ 506:	c4 43 15 02 f3 0c    	vpblendd $0xc,%ymm11,%ymm13,%ymm14
+ 50c:	c4 c3 6d 02 d5 30    	vpblendd $0x30,%ymm13,%ymm2,%ymm2
+ 512:	c4 43 0d 02 f2 30    	vpblendd $0x30,%ymm10,%ymm14,%ymm14
+ 518:	c4 c3 6d 02 d2 c0    	vpblendd $0xc0,%ymm10,%ymm2,%ymm2
+ 51e:	c4 43 0d 02 f4 c0    	vpblendd $0xc0,%ymm12,%ymm14,%ymm14
+ 524:	c4 c1 6d df d6       	vpandn %ymm14,%ymm2,%ymm2
+ 529:	c4 c1 6d ef d1       	vpxor  %ymm9,%ymm2,%ymm2
+ 52e:	c4 e3 fd 00 ff 00    	vpermq $0x0,%ymm7,%ymm7
+ 534:	c4 e3 fd 00 db 1b    	vpermq $0x1b,%ymm3,%ymm3
+ 53a:	c4 e3 fd 00 ed 8d    	vpermq $0x8d,%ymm5,%ymm5
+ 540:	c4 e3 fd 00 f6 72    	vpermq $0x72,%ymm6,%ymm6
+ 546:	c4 c3 15 02 e2 0c    	vpblendd $0xc,%ymm10,%ymm13,%ymm4
+ 54c:	c4 43 1d 02 f5 0c    	vpblendd $0xc,%ymm13,%ymm12,%ymm14
+ 552:	c4 c3 5d 02 e4 30    	vpblendd $0x30,%ymm12,%ymm4,%ymm4
+ 558:	c4 43 0d 02 f1 30    	vpblendd $0x30,%ymm9,%ymm14,%ymm14
+ 55e:	c4 c3 5d 02 e1 c0    	vpblendd $0xc0,%ymm9,%ymm4,%ymm4
+ 564:	c4 43 0d 02 f2 c0    	vpblendd $0xc0,%ymm10,%ymm14,%ymm14
+ 56a:	c4 c1 5d df e6       	vpandn %ymm14,%ymm4,%ymm4
+ 56f:	c5 fd ef c7          	vpxor  %ymm7,%ymm0,%ymm0
+ 573:	c4 c1 75 ef c8       	vpxor  %ymm8,%ymm1,%ymm1
+ 578:	c4 c1 5d ef e3       	vpxor  %ymm11,%ymm4,%ymm4
+ 57d:	c4 c1 7d ef 02       	vpxor  (%r10),%ymm0,%ymm0
+ 582:	4d 8d 52 20          	lea    0x20(%r10),%r10
+ 586:	ff c8                	dec    %eax
+ 588:	0f 85 b2 fd ff ff    	jne    340 <__KeccakF1600>
+ 58e:	c3                   	ret    
+
+000000000000058f <KeccakP1600_Permute_24rounds>:
+ 58f:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 596:	00 00 00 00 
+ 59a:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 5a0:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # 5a7 <KeccakP1600_Permute_24rounds+0x18>
+ 5a7:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 5ae <KeccakP1600_Permute_24rounds+0x1f>
+ 5ae:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # 5b5 <KeccakP1600_Permute_24rounds+0x26>
+ 5b5:	b8 18 00 00 00       	mov    $0x18,%eax
+ 5ba:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ 5be:	c5 f8 77             	vzeroupper 
+ 5c1:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ 5c7:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ 5cc:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ 5d1:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ 5d6:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ 5db:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ 5e0:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+ 5e5:	e8 56 fd ff ff       	call   340 <__KeccakF1600>
+ 5ea:	c5 f9 d6 47 a0       	vmovq  %xmm0,-0x60(%rdi)
+ 5ef:	c5 fe 7f 4f a8       	vmovdqu %ymm1,-0x58(%rdi)
+ 5f4:	c5 fe 7f 57 c8       	vmovdqu %ymm2,-0x38(%rdi)
+ 5f9:	c5 fe 7f 5f e8       	vmovdqu %ymm3,-0x18(%rdi)
+ 5fe:	c5 fe 7f 67 08       	vmovdqu %ymm4,0x8(%rdi)
+ 603:	c5 fe 7f 6f 28       	vmovdqu %ymm5,0x28(%rdi)
+ 608:	c5 fe 7f 77 48       	vmovdqu %ymm6,0x48(%rdi)
+ 60d:	c5 f8 77             	vzeroupper 
+ 610:	c3                   	ret    
+
+0000000000000611 <KeccakP1600_Permute_12rounds>:
+ 611:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 618:	00 00 00 00 
+ 61c:	0f 1f 40 00          	nopl   0x0(%rax)
+ 620:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # 627 <KeccakP1600_Permute_12rounds+0x16>
+ 627:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 62e <KeccakP1600_Permute_12rounds+0x1d>
+ 62e:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # 635 <KeccakP1600_Permute_12rounds+0x24>
+ 635:	b8 0c 00 00 00       	mov    $0xc,%eax
+ 63a:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ 63e:	c5 f8 77             	vzeroupper 
+ 641:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ 647:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ 64c:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ 651:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ 656:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ 65b:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ 660:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+ 665:	e8 d6 fc ff ff       	call   340 <__KeccakF1600>
+ 66a:	c5 f9 d6 47 a0       	vmovq  %xmm0,-0x60(%rdi)
+ 66f:	c5 fe 7f 4f a8       	vmovdqu %ymm1,-0x58(%rdi)
+ 674:	c5 fe 7f 57 c8       	vmovdqu %ymm2,-0x38(%rdi)
+ 679:	c5 fe 7f 5f e8       	vmovdqu %ymm3,-0x18(%rdi)
+ 67e:	c5 fe 7f 67 08       	vmovdqu %ymm4,0x8(%rdi)
+ 683:	c5 fe 7f 6f 28       	vmovdqu %ymm5,0x28(%rdi)
+ 688:	c5 fe 7f 77 48       	vmovdqu %ymm6,0x48(%rdi)
+ 68d:	c5 f8 77             	vzeroupper 
+ 690:	c3                   	ret    
+
+0000000000000691 <KeccakP1600_Permute_Nrounds>:
+ 691:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 698:	00 00 00 00 
+ 69c:	0f 1f 40 00          	nopl   0x0(%rax)
+ 6a0:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # 6a7 <KeccakP1600_Permute_Nrounds+0x16>
+ 6a7:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 6ae <KeccakP1600_Permute_Nrounds+0x1d>
+ 6ae:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # 6b5 <KeccakP1600_Permute_Nrounds+0x24>
+ 6b5:	48 89 f0             	mov    %rsi,%rax
+ 6b8:	48 c1 e6 05          	shl    $0x5,%rsi
+ 6bc:	49 29 f2             	sub    %rsi,%r10
+ 6bf:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ 6c3:	c5 f8 77             	vzeroupper 
+ 6c6:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ 6cc:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ 6d1:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ 6d6:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ 6db:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ 6e0:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ 6e5:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+ 6ea:	e8 51 fc ff ff       	call   340 <__KeccakF1600>
+ 6ef:	c5 f9 d6 47 a0       	vmovq  %xmm0,-0x60(%rdi)
+ 6f4:	c5 fe 7f 4f a8       	vmovdqu %ymm1,-0x58(%rdi)
+ 6f9:	c5 fe 7f 57 c8       	vmovdqu %ymm2,-0x38(%rdi)
+ 6fe:	c5 fe 7f 5f e8       	vmovdqu %ymm3,-0x18(%rdi)
+ 703:	c5 fe 7f 67 08       	vmovdqu %ymm4,0x8(%rdi)
+ 708:	c5 fe 7f 6f 28       	vmovdqu %ymm5,0x28(%rdi)
+ 70d:	c5 fe 7f 77 48       	vmovdqu %ymm6,0x48(%rdi)
+ 712:	c5 f8 77             	vzeroupper 
+ 715:	c3                   	ret    
+
+0000000000000716 <KeccakF1600_FastLoop_Absorb>:
+ 716:	66 2e 0f 1f 84 00 00 	cs nopw 0x0(%rax,%rax,1)
+ 71d:	00 00 00 
+ 720:	53                   	push   %rbx
+ 721:	41 52                	push   %r10
+ 723:	48 c1 e9 03          	shr    $0x3,%rcx
+ 727:	48 89 d3             	mov    %rdx,%rbx
+ 72a:	48 39 f1             	cmp    %rsi,%rcx
+ 72d:	0f 82 37 01 00 00    	jb     86a <KeccakF1600_FastLoop_Absorb_Exit>
+ 733:	c5 f8 77             	vzeroupper 
+ 736:	48 83 fe 15          	cmp    $0x15,%rsi
+ 73a:	0f 85 37 01 00 00    	jne    877 <KeccakF1600_FastLoop_Absorb_Not21Lanes>
+ 740:	48 83 e9 15          	sub    $0x15,%rcx
+ 744:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # 74b <KeccakF1600_FastLoop_Absorb+0x35>
+ 74b:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 752 <KeccakF1600_FastLoop_Absorb+0x3c>
+ 752:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ 756:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ 75c:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ 761:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ 766:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ 76b:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ 770:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ 775:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+
+000000000000077a <KeccakF1600_FastLoop_Absorb_Loop21Lanes>:
+ 77a:	c4 e2 7d 59 3a       	vpbroadcastq (%rdx),%ymm7
+ 77f:	c5 7e 6f 42 08       	vmovdqu 0x8(%rdx),%ymm8
+ 784:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 78c <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x12>
+ 78b:	00 
+ 78c:	c4 41 0d 76 f6       	vpcmpeqd %ymm14,%ymm14,%ymm14
+ 791:	c4 22 8d 90 0c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm9
+ 797:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 79f <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x25>
+ 79e:	00 
+ 79f:	c4 41 2d ef d2       	vpxor  %ymm10,%ymm10,%ymm10
+ 7a4:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 7ac <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x32>
+ 7ab:	00 
+ 7ac:	c4 22 8d 90 14 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm10
+ 7b2:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 7ba <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x40>
+ 7b9:	00 
+ 7ba:	c4 41 25 ef db       	vpxor  %ymm11,%ymm11,%ymm11
+ 7bf:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 7c7 <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x4d>
+ 7c6:	00 
+ 7c7:	c4 22 8d 90 1c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm11
+ 7cd:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 7d5 <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x5b>
+ 7d4:	00 
+ 7d5:	c4 41 1d ef e4       	vpxor  %ymm12,%ymm12,%ymm12
+ 7da:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 7e2 <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x68>
+ 7e1:	00 
+ 7e2:	c4 22 8d 90 24 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm12
+ 7e8:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 7f0 <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x76>
+ 7ef:	00 
+ 7f0:	c4 41 15 ef ed       	vpxor  %ymm13,%ymm13,%ymm13
+ 7f5:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 7fd <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0x83>
+ 7fc:	00 
+ 7fd:	c4 22 8d 90 2c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm13
+ 803:	c5 fd ef c7          	vpxor  %ymm7,%ymm0,%ymm0
+ 807:	c4 c1 75 ef c8       	vpxor  %ymm8,%ymm1,%ymm1
+ 80c:	c4 c1 6d ef d1       	vpxor  %ymm9,%ymm2,%ymm2
+ 811:	c4 c1 65 ef da       	vpxor  %ymm10,%ymm3,%ymm3
+ 816:	c4 c1 5d ef e3       	vpxor  %ymm11,%ymm4,%ymm4
+ 81b:	c4 c1 55 ef ec       	vpxor  %ymm12,%ymm5,%ymm5
+ 820:	c4 c1 4d ef f5       	vpxor  %ymm13,%ymm6,%ymm6
+ 825:	48 81 c2 a8 00 00 00 	add    $0xa8,%rdx
+ 82c:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # 833 <KeccakF1600_FastLoop_Absorb_Loop21Lanes+0xb9>
+ 833:	b8 18 00 00 00       	mov    $0x18,%eax
+ 838:	e8 03 fb ff ff       	call   340 <__KeccakF1600>
+ 83d:	48 83 e9 15          	sub    $0x15,%rcx
+ 841:	0f 83 33 ff ff ff    	jae    77a <KeccakF1600_FastLoop_Absorb_Loop21Lanes>
+
+0000000000000847 <KeccakF1600_FastLoop_Absorb_SaveAndExit>:
+ 847:	c5 f9 d6 47 a0       	vmovq  %xmm0,-0x60(%rdi)
+ 84c:	c5 fe 7f 4f a8       	vmovdqu %ymm1,-0x58(%rdi)
+ 851:	c5 fe 7f 57 c8       	vmovdqu %ymm2,-0x38(%rdi)
+ 856:	c5 fe 7f 5f e8       	vmovdqu %ymm3,-0x18(%rdi)
+ 85b:	c5 fe 7f 67 08       	vmovdqu %ymm4,0x8(%rdi)
+ 860:	c5 fe 7f 6f 28       	vmovdqu %ymm5,0x28(%rdi)
+ 865:	c5 fe 7f 77 48       	vmovdqu %ymm6,0x48(%rdi)
+
+000000000000086a <KeccakF1600_FastLoop_Absorb_Exit>:
+ 86a:	c5 f8 77             	vzeroupper 
+ 86d:	48 89 d0             	mov    %rdx,%rax
+ 870:	48 29 d8             	sub    %rbx,%rax
+ 873:	41 5a                	pop    %r10
+ 875:	5b                   	pop    %rbx
+ 876:	c3                   	ret    
+
+0000000000000877 <KeccakF1600_FastLoop_Absorb_Not21Lanes>:
+ 877:	48 83 fe 11          	cmp    $0x11,%rsi
+ 87b:	0f 85 14 01 00 00    	jne    995 <KeccakF1600_FastLoop_Absorb_Not17Lanes>
+ 881:	48 83 e9 11          	sub    $0x11,%rcx
+ 885:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # 88c <KeccakF1600_FastLoop_Absorb_Not21Lanes+0x15>
+ 88c:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 893 <KeccakF1600_FastLoop_Absorb_Not21Lanes+0x1c>
+ 893:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ 897:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ 89d:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ 8a2:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ 8a7:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ 8ac:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ 8b1:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ 8b6:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+
+00000000000008bb <KeccakF1600_FastLoop_Absorb_Loop17Lanes>:
+ 8bb:	c4 e2 7d 59 3a       	vpbroadcastq (%rdx),%ymm7
+ 8c0:	c5 7e 6f 42 08       	vmovdqu 0x8(%rdx),%ymm8
+ 8c5:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 8cd <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x12>
+ 8cc:	00 
+ 8cd:	c4 41 35 ef c9       	vpxor  %ymm9,%ymm9,%ymm9
+ 8d2:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 8da <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x1f>
+ 8d9:	00 
+ 8da:	c4 22 8d 90 0c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm9
+ 8e0:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 8e8 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x2d>
+ 8e7:	00 
+ 8e8:	c4 41 2d ef d2       	vpxor  %ymm10,%ymm10,%ymm10
+ 8ed:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 8f5 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x3a>
+ 8f4:	00 
+ 8f5:	c4 22 8d 90 14 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm10
+ 8fb:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 903 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x48>
+ 902:	00 
+ 903:	c4 41 25 ef db       	vpxor  %ymm11,%ymm11,%ymm11
+ 908:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 910 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x55>
+ 90f:	00 
+ 910:	c4 22 8d 90 1c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm11
+ 916:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 91e <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x63>
+ 91d:	00 
+ 91e:	c4 41 1d ef e4       	vpxor  %ymm12,%ymm12,%ymm12
+ 923:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 92b <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x70>
+ 92a:	00 
+ 92b:	c4 22 8d 90 24 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm12
+ 931:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # 939 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x7e>
+ 938:	00 
+ 939:	c4 41 15 ef ed       	vpxor  %ymm13,%ymm13,%ymm13
+ 93e:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # 946 <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0x8b>
+ 945:	00 
+ 946:	c4 22 8d 90 2c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm13
+ 94c:	c5 fd ef c7          	vpxor  %ymm7,%ymm0,%ymm0
+ 950:	c4 c1 75 ef c8       	vpxor  %ymm8,%ymm1,%ymm1
+ 955:	c4 c1 6d ef d1       	vpxor  %ymm9,%ymm2,%ymm2
+ 95a:	c4 c1 65 ef da       	vpxor  %ymm10,%ymm3,%ymm3
+ 95f:	c4 c1 5d ef e3       	vpxor  %ymm11,%ymm4,%ymm4
+ 964:	c4 c1 55 ef ec       	vpxor  %ymm12,%ymm5,%ymm5
+ 969:	c4 c1 4d ef f5       	vpxor  %ymm13,%ymm6,%ymm6
+ 96e:	48 81 c2 88 00 00 00 	add    $0x88,%rdx
+ 975:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # 97c <KeccakF1600_FastLoop_Absorb_Loop17Lanes+0xc1>
+ 97c:	b8 18 00 00 00       	mov    $0x18,%eax
+ 981:	e8 ba f9 ff ff       	call   340 <__KeccakF1600>
+ 986:	48 83 e9 11          	sub    $0x11,%rcx
+ 98a:	0f 83 2b ff ff ff    	jae    8bb <KeccakF1600_FastLoop_Absorb_Loop17Lanes>
+ 990:	e9 b2 fe ff ff       	jmp    847 <KeccakF1600_FastLoop_Absorb_SaveAndExit>
+
+0000000000000995 <KeccakF1600_FastLoop_Absorb_Not17Lanes>:
+ 995:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # 99c <KeccakF1600_FastLoop_Absorb_Not17Lanes+0x7>
+ 99c:	48 89 f0             	mov    %rsi,%rax
+
+000000000000099f <KeccakF1600_FastLoop_Absorb_LanesAddLoop>:
+ 99f:	4c 8b 02             	mov    (%rdx),%r8
+ 9a2:	48 83 c2 08          	add    $0x8,%rdx
+ 9a6:	4d 8b 11             	mov    (%r9),%r10
+ 9a9:	49 83 c1 08          	add    $0x8,%r9
+ 9ad:	49 01 fa             	add    %rdi,%r10
+ 9b0:	4d 31 02             	xor    %r8,(%r10)
+ 9b3:	48 83 e8 01          	sub    $0x1,%rax
+ 9b7:	75 e6                	jne    99f <KeccakF1600_FastLoop_Absorb_LanesAddLoop>
+ 9b9:	48 29 f1             	sub    %rsi,%rcx
+ 9bc:	57                   	push   %rdi
+ 9bd:	56                   	push   %rsi
+ 9be:	52                   	push   %rdx
+ 9bf:	51                   	push   %rcx
+ 9c0:	e8 00 00 00 00       	call   9c5 <KeccakF1600_FastLoop_Absorb_LanesAddLoop+0x26>
+ 9c5:	59                   	pop    %rcx
+ 9c6:	5a                   	pop    %rdx
+ 9c7:	5e                   	pop    %rsi
+ 9c8:	5f                   	pop    %rdi
+ 9c9:	48 39 f1             	cmp    %rsi,%rcx
+ 9cc:	73 c7                	jae    995 <KeccakF1600_FastLoop_Absorb_Not17Lanes>
+ 9ce:	e9 97 fe ff ff       	jmp    86a <KeccakF1600_FastLoop_Absorb_Exit>
+
+00000000000009d3 <KeccakP1600_12rounds_FastLoop_Absorb>:
+ 9d3:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 9da:	00 00 00 00 
+ 9de:	66 90                	xchg   %ax,%ax
+ 9e0:	53                   	push   %rbx
+ 9e1:	41 52                	push   %r10
+ 9e3:	48 c1 e9 03          	shr    $0x3,%rcx
+ 9e7:	48 89 d3             	mov    %rdx,%rbx
+ 9ea:	48 39 f1             	cmp    %rsi,%rcx
+ 9ed:	0f 82 37 01 00 00    	jb     b2a <KeccakP1600_12rounds_FastLoop_Absorb_Exit>
+ 9f3:	c5 f8 77             	vzeroupper 
+ 9f6:	48 83 fe 15          	cmp    $0x15,%rsi
+ 9fa:	0f 85 37 01 00 00    	jne    b37 <KeccakP1600_12rounds_FastLoop_Absorb_Not21Lanes>
+ a00:	48 83 e9 15          	sub    $0x15,%rcx
+ a04:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # a0b <KeccakP1600_12rounds_FastLoop_Absorb+0x38>
+ a0b:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # a12 <KeccakP1600_12rounds_FastLoop_Absorb+0x3f>
+ a12:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ a16:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ a1c:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ a21:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ a26:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ a2b:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ a30:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ a35:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+
+0000000000000a3a <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes>:
+ a3a:	c4 e2 7d 59 3a       	vpbroadcastq (%rdx),%ymm7
+ a3f:	c5 7e 6f 42 08       	vmovdqu 0x8(%rdx),%ymm8
+ a44:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # a4c <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x12>
+ a4b:	00 
+ a4c:	c4 41 0d 76 f6       	vpcmpeqd %ymm14,%ymm14,%ymm14
+ a51:	c4 22 8d 90 0c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm9
+ a57:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # a5f <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x25>
+ a5e:	00 
+ a5f:	c4 41 2d ef d2       	vpxor  %ymm10,%ymm10,%ymm10
+ a64:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # a6c <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x32>
+ a6b:	00 
+ a6c:	c4 22 8d 90 14 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm10
+ a72:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # a7a <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x40>
+ a79:	00 
+ a7a:	c4 41 25 ef db       	vpxor  %ymm11,%ymm11,%ymm11
+ a7f:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # a87 <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x4d>
+ a86:	00 
+ a87:	c4 22 8d 90 1c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm11
+ a8d:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # a95 <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x5b>
+ a94:	00 
+ a95:	c4 41 1d ef e4       	vpxor  %ymm12,%ymm12,%ymm12
+ a9a:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # aa2 <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x68>
+ aa1:	00 
+ aa2:	c4 22 8d 90 24 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm12
+ aa8:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # ab0 <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x76>
+ aaf:	00 
+ ab0:	c4 41 15 ef ed       	vpxor  %ymm13,%ymm13,%ymm13
+ ab5:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # abd <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0x83>
+ abc:	00 
+ abd:	c4 22 8d 90 2c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm13
+ ac3:	c5 fd ef c7          	vpxor  %ymm7,%ymm0,%ymm0
+ ac7:	c4 c1 75 ef c8       	vpxor  %ymm8,%ymm1,%ymm1
+ acc:	c4 c1 6d ef d1       	vpxor  %ymm9,%ymm2,%ymm2
+ ad1:	c4 c1 65 ef da       	vpxor  %ymm10,%ymm3,%ymm3
+ ad6:	c4 c1 5d ef e3       	vpxor  %ymm11,%ymm4,%ymm4
+ adb:	c4 c1 55 ef ec       	vpxor  %ymm12,%ymm5,%ymm5
+ ae0:	c4 c1 4d ef f5       	vpxor  %ymm13,%ymm6,%ymm6
+ ae5:	48 81 c2 a8 00 00 00 	add    $0xa8,%rdx
+ aec:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # af3 <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes+0xb9>
+ af3:	b8 0c 00 00 00       	mov    $0xc,%eax
+ af8:	e8 43 f8 ff ff       	call   340 <__KeccakF1600>
+ afd:	48 83 e9 15          	sub    $0x15,%rcx
+ b01:	0f 83 33 ff ff ff    	jae    a3a <KeccakP1600_12rounds_FastLoop_Absorb_Loop21Lanes>
+
+0000000000000b07 <KeccakP1600_12rounds_FastLoop_Absorb_SaveAndExit>:
+ b07:	c5 f9 d6 47 a0       	vmovq  %xmm0,-0x60(%rdi)
+ b0c:	c5 fe 7f 4f a8       	vmovdqu %ymm1,-0x58(%rdi)
+ b11:	c5 fe 7f 57 c8       	vmovdqu %ymm2,-0x38(%rdi)
+ b16:	c5 fe 7f 5f e8       	vmovdqu %ymm3,-0x18(%rdi)
+ b1b:	c5 fe 7f 67 08       	vmovdqu %ymm4,0x8(%rdi)
+ b20:	c5 fe 7f 6f 28       	vmovdqu %ymm5,0x28(%rdi)
+ b25:	c5 fe 7f 77 48       	vmovdqu %ymm6,0x48(%rdi)
+
+0000000000000b2a <KeccakP1600_12rounds_FastLoop_Absorb_Exit>:
+ b2a:	c5 f8 77             	vzeroupper 
+ b2d:	48 89 d0             	mov    %rdx,%rax
+ b30:	48 29 d8             	sub    %rbx,%rax
+ b33:	41 5a                	pop    %r10
+ b35:	5b                   	pop    %rbx
+ b36:	c3                   	ret    
+
+0000000000000b37 <KeccakP1600_12rounds_FastLoop_Absorb_Not21Lanes>:
+ b37:	48 83 fe 11          	cmp    $0x11,%rsi
+ b3b:	0f 85 14 01 00 00    	jne    c55 <KeccakP1600_12rounds_FastLoop_Absorb_Not17Lanes>
+ b41:	48 83 e9 11          	sub    $0x11,%rcx
+ b45:	4c 8d 05 00 00 00 00 	lea    0x0(%rip),%r8        # b4c <KeccakP1600_12rounds_FastLoop_Absorb_Not21Lanes+0x15>
+ b4c:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # b53 <KeccakP1600_12rounds_FastLoop_Absorb_Not21Lanes+0x1c>
+ b53:	48 8d 7f 60          	lea    0x60(%rdi),%rdi
+ b57:	c4 e2 7d 59 47 a0    	vpbroadcastq -0x60(%rdi),%ymm0
+ b5d:	c5 fe 6f 4f a8       	vmovdqu -0x58(%rdi),%ymm1
+ b62:	c5 fe 6f 57 c8       	vmovdqu -0x38(%rdi),%ymm2
+ b67:	c5 fe 6f 5f e8       	vmovdqu -0x18(%rdi),%ymm3
+ b6c:	c5 fe 6f 67 08       	vmovdqu 0x8(%rdi),%ymm4
+ b71:	c5 fe 6f 6f 28       	vmovdqu 0x28(%rdi),%ymm5
+ b76:	c5 fe 6f 77 48       	vmovdqu 0x48(%rdi),%ymm6
+
+0000000000000b7b <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes>:
+ b7b:	c4 e2 7d 59 3a       	vpbroadcastq (%rdx),%ymm7
+ b80:	c5 7e 6f 42 08       	vmovdqu 0x8(%rdx),%ymm8
+ b85:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # b8d <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x12>
+ b8c:	00 
+ b8d:	c4 41 35 ef c9       	vpxor  %ymm9,%ymm9,%ymm9
+ b92:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # b9a <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x1f>
+ b99:	00 
+ b9a:	c4 22 8d 90 0c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm9
+ ba0:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # ba8 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x2d>
+ ba7:	00 
+ ba8:	c4 41 2d ef d2       	vpxor  %ymm10,%ymm10,%ymm10
+ bad:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # bb5 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x3a>
+ bb4:	00 
+ bb5:	c4 22 8d 90 14 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm10
+ bbb:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # bc3 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x48>
+ bc2:	00 
+ bc3:	c4 41 25 ef db       	vpxor  %ymm11,%ymm11,%ymm11
+ bc8:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # bd0 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x55>
+ bcf:	00 
+ bd0:	c4 22 8d 90 1c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm11
+ bd6:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # bde <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x63>
+ bdd:	00 
+ bde:	c4 41 1d ef e4       	vpxor  %ymm12,%ymm12,%ymm12
+ be3:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # beb <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x70>
+ bea:	00 
+ beb:	c4 22 8d 90 24 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm12
+ bf1:	c5 7d 6f 35 00 00 00 	vmovdqa 0x0(%rip),%ymm14        # bf9 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x7e>
+ bf8:	00 
+ bf9:	c4 41 15 ef ed       	vpxor  %ymm13,%ymm13,%ymm13
+ bfe:	c5 79 6f 3d 00 00 00 	vmovdqa 0x0(%rip),%xmm15        # c06 <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0x8b>
+ c05:	00 
+ c06:	c4 22 8d 90 2c 3a    	vpgatherdq %ymm14,(%rdx,%xmm15,1),%ymm13
+ c0c:	c5 fd ef c7          	vpxor  %ymm7,%ymm0,%ymm0
+ c10:	c4 c1 75 ef c8       	vpxor  %ymm8,%ymm1,%ymm1
+ c15:	c4 c1 6d ef d1       	vpxor  %ymm9,%ymm2,%ymm2
+ c1a:	c4 c1 65 ef da       	vpxor  %ymm10,%ymm3,%ymm3
+ c1f:	c4 c1 5d ef e3       	vpxor  %ymm11,%ymm4,%ymm4
+ c24:	c4 c1 55 ef ec       	vpxor  %ymm12,%ymm5,%ymm5
+ c29:	c4 c1 4d ef f5       	vpxor  %ymm13,%ymm6,%ymm6
+ c2e:	48 81 c2 88 00 00 00 	add    $0x88,%rdx
+ c35:	4c 8d 15 00 00 00 00 	lea    0x0(%rip),%r10        # c3c <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes+0xc1>
+ c3c:	b8 0c 00 00 00       	mov    $0xc,%eax
+ c41:	e8 fa f6 ff ff       	call   340 <__KeccakF1600>
+ c46:	48 83 e9 11          	sub    $0x11,%rcx
+ c4a:	0f 83 2b ff ff ff    	jae    b7b <KeccakP1600_12rounds_FastLoop_Absorb_Loop17Lanes>
+ c50:	e9 b2 fe ff ff       	jmp    b07 <KeccakP1600_12rounds_FastLoop_Absorb_SaveAndExit>
+
+0000000000000c55 <KeccakP1600_12rounds_FastLoop_Absorb_Not17Lanes>:
+ c55:	4c 8d 0d 00 00 00 00 	lea    0x0(%rip),%r9        # c5c <KeccakP1600_12rounds_FastLoop_Absorb_Not17Lanes+0x7>
+ c5c:	48 89 f0             	mov    %rsi,%rax
+
+0000000000000c5f <KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop>:
+ c5f:	4c 8b 02             	mov    (%rdx),%r8
+ c62:	48 83 c2 08          	add    $0x8,%rdx
+ c66:	4d 8b 11             	mov    (%r9),%r10
+ c69:	49 83 c1 08          	add    $0x8,%r9
+ c6d:	49 01 fa             	add    %rdi,%r10
+ c70:	4d 31 02             	xor    %r8,(%r10)
+ c73:	48 83 e8 01          	sub    $0x1,%rax
+ c77:	75 e6                	jne    c5f <KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop>
+ c79:	48 29 f1             	sub    %rsi,%rcx
+ c7c:	57                   	push   %rdi
+ c7d:	56                   	push   %rsi
+ c7e:	52                   	push   %rdx
+ c7f:	51                   	push   %rcx
+ c80:	e8 00 00 00 00       	call   c85 <KeccakP1600_12rounds_FastLoop_Absorb_LanesAddLoop+0x26>
+ c85:	59                   	pop    %rcx
+ c86:	5a                   	pop    %rdx
+ c87:	5e                   	pop    %rsi
+ c88:	5f                   	pop    %rdi
+ c89:	48 39 f1             	cmp    %rsi,%rcx
+ c8c:	73 c7                	jae    c55 <KeccakP1600_12rounds_FastLoop_Absorb_Not17Lanes>
+ c8e:	e9 97 fe ff ff       	jmp    b2a <KeccakP1600_12rounds_FastLoop_Absorb_Exit>
