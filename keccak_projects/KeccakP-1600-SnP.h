@@ -44,10 +44,4 @@ extern void KeccakP1600_Permute_24rounds(KeccakP1600_plain8_state *state);
 extern void KeccakP1600_ExtractBytes(const KeccakP1600_plain8_state *state, unsigned char *data, unsigned int offset, unsigned int length);
 extern void KeccakP1600_ExtractAndAddBytes(const KeccakP1600_plain8_state *state, const unsigned char *input, unsigned char *output, unsigned int offset, unsigned int length);
 
-#ifdef JASMIN
-int jade_hash_sha3_256_amd64(uint8_t *hash, const uint8_t *input, uint64_t input_length);
-#else
-int sha3(uint8_t *hash, const uint8_t *input, uint64_t input_length);
-#endif
-
 #endif

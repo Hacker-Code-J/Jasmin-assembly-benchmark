@@ -1,0 +1,793 @@
+
+KeccakP-1600-reference.o:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+0000000000000000 <KeccakP1600_Initialize>:
+   0:	f3 0f 1e fa          	endbr64 
+   4:	48 c7 07 00 00 00 00 	movq   $0x0,(%rdi)
+   b:	48 89 f9             	mov    %rdi,%rcx
+   e:	48 8d 7f 08          	lea    0x8(%rdi),%rdi
+  12:	31 c0                	xor    %eax,%eax
+  14:	48 c7 87 b8 00 00 00 	movq   $0x0,0xb8(%rdi)
+  1b:	00 00 00 00 
+  1f:	48 83 e7 f8          	and    $0xfffffffffffffff8,%rdi
+  23:	48 29 f9             	sub    %rdi,%rcx
+  26:	81 c1 c8 00 00 00    	add    $0xc8,%ecx
+  2c:	c1 e9 03             	shr    $0x3,%ecx
+  2f:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+  32:	c3                   	ret    
+  33:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  3a:	00 00 00 00 
+  3e:	66 90                	xchg   %ax,%ax
+
+0000000000000040 <KeccakP1600_AddByte>:
+  40:	f3 0f 1e fa          	endbr64 
+  44:	81 fa c7 00 00 00    	cmp    $0xc7,%edx
+  4a:	77 07                	ja     53 <KeccakP1600_AddByte+0x13>
+  4c:	89 d2                	mov    %edx,%edx
+  4e:	40 30 34 17          	xor    %sil,(%rdi,%rdx,1)
+  52:	c3                   	ret    
+  53:	50                   	push   %rax
+  54:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 5b <KeccakP1600_AddByte+0x1b>
+  5b:	ba 53 00 00 00       	mov    $0x53,%edx
+  60:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 67 <KeccakP1600_AddByte+0x27>
+  67:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 6e <KeccakP1600_AddByte+0x2e>
+  6e:	e8 00 00 00 00       	call   73 <KeccakP1600_AddByte+0x33>
+  73:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+  7a:	00 00 00 00 
+  7e:	66 90                	xchg   %ax,%ax
+
+0000000000000080 <KeccakP1600_AddBytes>:
+  80:	f3 0f 1e fa          	endbr64 
+  84:	48 83 ec 08          	sub    $0x8,%rsp
+  88:	81 fa c7 00 00 00    	cmp    $0xc7,%edx
+  8e:	77 3b                	ja     cb <KeccakP1600_AddBytes+0x4b>
+  90:	8d 04 0a             	lea    (%rdx,%rcx,1),%eax
+  93:	3d c8 00 00 00       	cmp    $0xc8,%eax
+  98:	77 50                	ja     ea <KeccakP1600_AddBytes+0x6a>
+  9a:	85 c9                	test   %ecx,%ecx
+  9c:	74 28                	je     c6 <KeccakP1600_AddBytes+0x46>
+  9e:	8d 41 ff             	lea    -0x1(%rcx),%eax
+  a1:	29 f2                	sub    %esi,%edx
+  a3:	4c 8d 44 06 01       	lea    0x1(%rsi,%rax,1),%r8
+  a8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+  af:	00 
+  b0:	8d 0c 32             	lea    (%rdx,%rsi,1),%ecx
+  b3:	48 83 c6 01          	add    $0x1,%rsi
+  b7:	0f b6 04 0f          	movzbl (%rdi,%rcx,1),%eax
+  bb:	32 46 ff             	xor    -0x1(%rsi),%al
+  be:	88 04 0f             	mov    %al,(%rdi,%rcx,1)
+  c1:	4c 39 c6             	cmp    %r8,%rsi
+  c4:	75 ea                	jne    b0 <KeccakP1600_AddBytes+0x30>
+  c6:	48 83 c4 08          	add    $0x8,%rsp
+  ca:	c3                   	ret    
+  cb:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # d2 <KeccakP1600_AddBytes+0x52>
+  d2:	ba 5d 00 00 00       	mov    $0x5d,%edx
+  d7:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # de <KeccakP1600_AddBytes+0x5e>
+  de:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # e5 <KeccakP1600_AddBytes+0x65>
+  e5:	e8 00 00 00 00       	call   ea <KeccakP1600_AddBytes+0x6a>
+  ea:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # f1 <KeccakP1600_AddBytes+0x71>
+  f1:	ba 5e 00 00 00       	mov    $0x5e,%edx
+  f6:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # fd <KeccakP1600_AddBytes+0x7d>
+  fd:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 104 <KeccakP1600_AddBytes+0x84>
+ 104:	e8 00 00 00 00       	call   109 <KeccakP1600_AddBytes+0x89>
+ 109:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000110 <KeccakP1600_OverwriteBytes>:
+ 110:	f3 0f 1e fa          	endbr64 
+ 114:	48 83 ec 08          	sub    $0x8,%rsp
+ 118:	81 fa c7 00 00 00    	cmp    $0xc7,%edx
+ 11e:	77 1a                	ja     13a <KeccakP1600_OverwriteBytes+0x2a>
+ 120:	8d 04 0a             	lea    (%rdx,%rcx,1),%eax
+ 123:	3d c8 00 00 00       	cmp    $0xc8,%eax
+ 128:	77 2f                	ja     159 <KeccakP1600_OverwriteBytes+0x49>
+ 12a:	89 d2                	mov    %edx,%edx
+ 12c:	48 83 c4 08          	add    $0x8,%rsp
+ 130:	48 01 d7             	add    %rdx,%rdi
+ 133:	89 ca                	mov    %ecx,%edx
+ 135:	e9 00 00 00 00       	jmp    13a <KeccakP1600_OverwriteBytes+0x2a>
+ 13a:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 141 <KeccakP1600_OverwriteBytes+0x31>
+ 141:	ba 67 00 00 00       	mov    $0x67,%edx
+ 146:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 14d <KeccakP1600_OverwriteBytes+0x3d>
+ 14d:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 154 <KeccakP1600_OverwriteBytes+0x44>
+ 154:	e8 00 00 00 00       	call   159 <KeccakP1600_OverwriteBytes+0x49>
+ 159:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 160 <KeccakP1600_OverwriteBytes+0x50>
+ 160:	ba 68 00 00 00       	mov    $0x68,%edx
+ 165:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 16c <KeccakP1600_OverwriteBytes+0x5c>
+ 16c:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 173 <KeccakP1600_OverwriteBytes+0x63>
+ 173:	e8 00 00 00 00       	call   178 <KeccakP1600_OverwriteBytes+0x68>
+ 178:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 17f:	00 
+
+0000000000000180 <KeccakP1600_OverwriteWithZeroes>:
+ 180:	f3 0f 1e fa          	endbr64 
+ 184:	81 fe c8 00 00 00    	cmp    $0xc8,%esi
+ 18a:	77 75                	ja     201 <KeccakP1600_OverwriteWithZeroes+0x81>
+ 18c:	48 89 f8             	mov    %rdi,%rax
+ 18f:	83 fe 08             	cmp    $0x8,%esi
+ 192:	73 1c                	jae    1b0 <KeccakP1600_OverwriteWithZeroes+0x30>
+ 194:	40 f6 c6 04          	test   $0x4,%sil
+ 198:	75 56                	jne    1f0 <KeccakP1600_OverwriteWithZeroes+0x70>
+ 19a:	85 f6                	test   %esi,%esi
+ 19c:	74 09                	je     1a7 <KeccakP1600_OverwriteWithZeroes+0x27>
+ 19e:	c6 07 00             	movb   $0x0,(%rdi)
+ 1a1:	40 f6 c6 02          	test   $0x2,%sil
+ 1a5:	75 39                	jne    1e0 <KeccakP1600_OverwriteWithZeroes+0x60>
+ 1a7:	c3                   	ret    
+ 1a8:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ 1af:	00 
+ 1b0:	89 f2                	mov    %esi,%edx
+ 1b2:	48 c7 07 00 00 00 00 	movq   $0x0,(%rdi)
+ 1b9:	48 8d 7f 08          	lea    0x8(%rdi),%rdi
+ 1bd:	48 c7 44 17 f0 00 00 	movq   $0x0,-0x10(%rdi,%rdx,1)
+ 1c4:	00 00 
+ 1c6:	48 83 e7 f8          	and    $0xfffffffffffffff8,%rdi
+ 1ca:	48 29 f8             	sub    %rdi,%rax
+ 1cd:	8d 0c 06             	lea    (%rsi,%rax,1),%ecx
+ 1d0:	31 c0                	xor    %eax,%eax
+ 1d2:	c1 e9 03             	shr    $0x3,%ecx
+ 1d5:	f3 48 ab             	rep stos %rax,%es:(%rdi)
+ 1d8:	c3                   	ret    
+ 1d9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 1e0:	89 f6                	mov    %esi,%esi
+ 1e2:	31 d2                	xor    %edx,%edx
+ 1e4:	66 89 54 37 fe       	mov    %dx,-0x2(%rdi,%rsi,1)
+ 1e9:	c3                   	ret    
+ 1ea:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 1f0:	89 f6                	mov    %esi,%esi
+ 1f2:	c7 07 00 00 00 00    	movl   $0x0,(%rdi)
+ 1f8:	c7 44 37 fc 00 00 00 	movl   $0x0,-0x4(%rdi,%rsi,1)
+ 1ff:	00 
+ 200:	c3                   	ret    
+ 201:	51                   	push   %rcx
+ 202:	ba 70 00 00 00       	mov    $0x70,%edx
+ 207:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 20e <KeccakP1600_OverwriteWithZeroes+0x8e>
+ 20e:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 215 <KeccakP1600_OverwriteWithZeroes+0x95>
+ 215:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 21c <KeccakP1600_OverwriteWithZeroes+0x9c>
+ 21c:	e8 00 00 00 00       	call   221 <KeccakP1600_OverwriteWithZeroes+0xa1>
+ 221:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 228:	00 00 00 00 
+ 22c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000000230 <KeccakP1600Round>:
+ 230:	f3 0f 1e fa          	endbr64 
+ 234:	41 56                	push   %r14
+ 236:	48 89 f8             	mov    %rdi,%rax
+ 239:	89 f6                	mov    %esi,%esi
+ 23b:	41 55                	push   %r13
+ 23d:	41 54                	push   %r12
+ 23f:	55                   	push   %rbp
+ 240:	53                   	push   %rbx
+ 241:	48 81 ec d0 00 00 00 	sub    $0xd0,%rsp
+ 248:	f3 0f 6f 47 78       	movdqu 0x78(%rdi),%xmm0
+ 24d:	48 8b 4f 20          	mov    0x20(%rdi),%rcx
+ 251:	f3 0f 6f bf a0 00 00 	movdqu 0xa0(%rdi),%xmm7
+ 258:	00 
+ 259:	f3 0f 6f 4f 28       	movdqu 0x28(%rdi),%xmm1
+ 25e:	64 48 8b 14 25 28 00 	mov    %fs:0x28,%rdx
+ 265:	00 00 
+ 267:	48 89 94 24 c8 00 00 	mov    %rdx,0xc8(%rsp)
+ 26e:	00 
+ 26f:	31 d2                	xor    %edx,%edx
+ 271:	f3 0f 6f 77 60       	movdqu 0x60(%rdi),%xmm6
+ 276:	f3 0f 6f 57 38       	movdqu 0x38(%rdi),%xmm2
+ 27b:	66 0f ef c7          	pxor   %xmm7,%xmm0
+ 27f:	f3 0f 6f 7f 50       	movdqu 0x50(%rdi),%xmm7
+ 284:	48 33 4f 48          	xor    0x48(%rdi),%rcx
+ 288:	66 0f ef d6          	pxor   %xmm6,%xmm2
+ 28c:	48 33 4f 70          	xor    0x70(%rdi),%rcx
+ 290:	f3 0f 6f 68 10       	movdqu 0x10(%rax),%xmm5
+ 295:	66 0f ef cf          	pxor   %xmm7,%xmm1
+ 299:	f3 0f 6f 3f          	movdqu (%rdi),%xmm7
+ 29d:	48 33 8f 98 00 00 00 	xor    0x98(%rdi),%rcx
+ 2a4:	66 0f ef c1          	pxor   %xmm1,%xmm0
+ 2a8:	f3 0f 6f 8f 88 00 00 	movdqu 0x88(%rdi),%xmm1
+ 2af:	00 
+ 2b0:	48 33 8f c0 00 00 00 	xor    0xc0(%rdi),%rcx
+ 2b7:	66 0f ef c7          	pxor   %xmm7,%xmm0
+ 2bb:	f3 0f 6f bf b0 00 00 	movdqu 0xb0(%rdi),%xmm7
+ 2c2:	00 
+ 2c3:	f3 44 0f 6f 08       	movdqu (%rax),%xmm9
+ 2c8:	0f 12 d8             	movhlps %xmm0,%xmm3
+ 2cb:	66 48 0f 7e c2       	movq   %xmm0,%rdx
+ 2d0:	f3 44 0f 6f 40 50    	movdqu 0x50(%rax),%xmm8
+ 2d6:	f3 0f 6f a0 a0 00 00 	movdqu 0xa0(%rax),%xmm4
+ 2dd:	00 
+ 2de:	66 0f ef cf          	pxor   %xmm7,%xmm1
+ 2e2:	f3 0f 6f 7f 10       	movdqu 0x10(%rdi),%xmm7
+ 2e7:	66 48 0f 7e df       	movq   %xmm3,%rdi
+ 2ec:	66 49 0f 7e da       	movq   %xmm3,%r10
+ 2f1:	66 0f ef ca          	pxor   %xmm2,%xmm1
+ 2f5:	48 d1 c7             	rol    %rdi
+ 2f8:	f3 0f 6f 50 28       	movdqu 0x28(%rax),%xmm2
+ 2fd:	66 0f ef cf          	pxor   %xmm7,%xmm1
+ 301:	48 31 cf             	xor    %rcx,%rdi
+ 304:	48 d1 c1             	rol    %rcx
+ 307:	66 49 0f 7e c8       	movq   %xmm1,%r8
+ 30c:	0f 12 f9             	movhlps %xmm1,%xmm7
+ 30f:	66 48 0f 6e c7       	movq   %rdi,%xmm0
+ 314:	49 d1 c0             	rol    %r8
+ 317:	66 48 0f 7e ff       	movq   %xmm7,%rdi
+ 31c:	66 49 0f 7e c9       	movq   %xmm1,%r9
+ 321:	f3 0f 6f 48 38       	movdqu 0x38(%rax),%xmm1
+ 326:	49 31 d0             	xor    %rdx,%r8
+ 329:	48 d1 c7             	rol    %rdi
+ 32c:	4c 31 c9             	xor    %r9,%rcx
+ 32f:	66 49 0f 6e f0       	movq   %r8,%xmm6
+ 334:	4c 31 d7             	xor    %r10,%rdi
+ 337:	66 49 0f 7e f8       	movq   %xmm7,%r8
+ 33c:	48 d1 c2             	rol    %rdx
+ 33f:	66 0f 6c c6          	punpcklqdq %xmm6,%xmm0
+ 343:	66 48 0f 6e df       	movq   %rdi,%xmm3
+ 348:	66 48 0f 6e f1       	movq   %rcx,%xmm6
+ 34d:	4c 31 c2             	xor    %r8,%rdx
+ 350:	66 0f ef d0          	pxor   %xmm0,%xmm2
+ 354:	66 0f 6c de          	punpcklqdq %xmm6,%xmm3
+ 358:	f3 0f 6f 70 78       	movdqu 0x78(%rax),%xmm6
+ 35d:	66 44 0f ef c8       	pxor   %xmm0,%xmm9
+ 362:	66 0f ef eb          	pxor   %xmm3,%xmm5
+ 366:	66 0f ef cb          	pxor   %xmm3,%xmm1
+ 36a:	66 0f ef e0          	pxor   %xmm0,%xmm4
+ 36e:	44 0f 11 08          	movups %xmm9,(%rax)
+ 372:	66 48 0f 7e d1       	movq   %xmm2,%rcx
+ 377:	66 0f 73 da 08       	psrldq $0x8,%xmm2
+ 37c:	66 48 0f 7e ef       	movq   %xmm5,%rdi
+ 381:	66 0f 73 dd 08       	psrldq $0x8,%xmm5
+ 386:	48 c1 c9 1c          	ror    $0x1c,%rcx
+ 38a:	66 0f ef f0          	pxor   %xmm0,%xmm6
+ 38e:	45 0f 12 f1          	movhlps %xmm9,%xmm14
+ 392:	48 c1 cf 02          	ror    $0x2,%rdi
+ 396:	49 89 cb             	mov    %rcx,%r11
+ 399:	66 48 0f 7e d1       	movq   %xmm2,%rcx
+ 39e:	66 49 0f 7e e8       	movq   %xmm5,%r8
+ 3a3:	48 c1 c9 14          	ror    $0x14,%rcx
+ 3a7:	66 49 0f 6e d3       	movq   %r11,%xmm2
+ 3ac:	66 44 0f ef c0       	pxor   %xmm0,%xmm8
+ 3b1:	f3 0f 6f 40 60       	movdqu 0x60(%rax),%xmm0
+ 3b6:	66 48 0f 6e e9       	movq   %rcx,%xmm5
+ 3bb:	66 48 0f 7e c9       	movq   %xmm1,%rcx
+ 3c0:	66 0f 73 d9 08       	psrldq $0x8,%xmm1
+ 3c5:	f3 0f 6f b8 88 00 00 	movdqu 0x88(%rax),%xmm7
+ 3cc:	00 
+ 3cd:	48 c1 c1 06          	rol    $0x6,%rcx
+ 3d1:	66 0f 6c d5          	punpcklqdq %xmm5,%xmm2
+ 3d5:	66 0f ef c3          	pxor   %xmm3,%xmm0
+ 3d9:	4c 8b 50 20          	mov    0x20(%rax),%r10
+ 3dd:	66 48 0f 6e e9       	movq   %rcx,%xmm5
+ 3e2:	66 48 0f 7e c9       	movq   %xmm1,%rcx
+ 3e7:	66 4d 0f 7e c3       	movq   %xmm8,%r11
+ 3ec:	f3 44 0f 6f a8 b0 00 	movdqu 0xb0(%rax),%xmm13
+ 3f3:	00 00 
+ 3f5:	48 c1 c9 09          	ror    $0x9,%rcx
+ 3f9:	49 c1 c3 03          	rol    $0x3,%r11
+ 3fd:	66 48 0f 7e c3       	movq   %xmm0,%rbx
+ 402:	49 31 d2             	xor    %rdx,%r10
+ 405:	66 48 0f 6e c9       	movq   %rcx,%xmm1
+ 40a:	48 8b 48 48          	mov    0x48(%rax),%rcx
+ 40e:	48 c1 cb 15          	ror    $0x15,%rbx
+ 412:	66 0f ef fb          	pxor   %xmm3,%xmm7
+ 416:	66 0f 6c e9          	punpcklqdq %xmm1,%xmm5
+ 41a:	66 4d 0f 6e fb       	movq   %r11,%xmm15
+ 41f:	66 41 0f ef dd       	pxor   %xmm13,%xmm3
+ 424:	49 c1 c0 1c          	rol    $0x1c,%r8
+ 428:	48 31 d1             	xor    %rdx,%rcx
+ 42b:	66 4c 0f 6e eb       	movq   %rbx,%xmm13
+ 430:	48 8b 58 70          	mov    0x70(%rax),%rbx
+ 434:	66 4d 0f 7e f1       	movq   %xmm14,%r9
+ 439:	48 c1 c1 14          	rol    $0x14,%rcx
+ 43d:	49 d1 c1             	rol    %r9
+ 440:	0f 11 54 24 28       	movups %xmm2,0x28(%rsp)
+ 445:	66 48 0f 6e c9       	movq   %rcx,%xmm1
+ 44a:	48 31 d3             	xor    %rdx,%rbx
+ 44d:	49 c1 c2 1b          	rol    $0x1b,%r10
+ 451:	0f 11 6c 24 38       	movups %xmm5,0x38(%rsp)
+ 456:	66 41 0f 6c cf       	punpcklqdq %xmm15,%xmm1
+ 45b:	0f 11 48 48          	movups %xmm1,0x48(%rax)
+ 45f:	66 49 0f 7e cb       	movq   %xmm1,%r11
+ 464:	41 0f 12 c8          	movhlps %xmm8,%xmm1
+ 468:	4c 8b 70 50          	mov    0x50(%rax),%r14
+ 46c:	66 48 0f 7e c9       	movq   %xmm1,%rcx
+ 471:	4c 89 5c 24 48       	mov    %r11,0x48(%rsp)
+ 476:	48 c1 c1 0a          	rol    $0xa,%rcx
+ 47a:	66 48 0f 6e c9       	movq   %rcx,%xmm1
+ 47f:	66 41 0f 6c cd       	punpcklqdq %xmm13,%xmm1
+ 484:	0f 11 48 58          	movups %xmm1,0x58(%rax)
+ 488:	0f 12 c8             	movhlps %xmm0,%xmm1
+ 48b:	4c 8b 68 60          	mov    0x60(%rax),%r13
+ 48f:	66 48 0f 7e c9       	movq   %xmm1,%rcx
+ 494:	48 c1 c1 19          	rol    $0x19,%rcx
+ 498:	48 c1 cb 19          	ror    $0x19,%rbx
+ 49c:	66 48 0f 6e cb       	movq   %rbx,%xmm1
+ 4a1:	66 48 0f 7e f3       	movq   %xmm6,%rbx
+ 4a6:	66 0f 73 de 08       	psrldq $0x8,%xmm6
+ 4ab:	66 48 0f 6e c1       	movq   %rcx,%xmm0
+ 4b0:	66 48 0f 7e f1       	movq   %xmm6,%rcx
+ 4b5:	48 c1 cb 17          	ror    $0x17,%rbx
+ 4b9:	48 c1 c9 13          	ror    $0x13,%rcx
+ 4bd:	66 0f 6c c1          	punpcklqdq %xmm1,%xmm0
+ 4c1:	66 48 0f 6e f3       	movq   %rbx,%xmm6
+ 4c6:	66 48 0f 6e c9       	movq   %rcx,%xmm1
+ 4cb:	66 48 0f 7e f9       	movq   %xmm7,%rcx
+ 4d0:	66 0f 73 df 08       	psrldq $0x8,%xmm7
+ 4d5:	0f 11 40 68          	movups %xmm0,0x68(%rax)
+ 4d9:	48 c1 c1 0f          	rol    $0xf,%rcx
+ 4dd:	66 0f 6c f1          	punpcklqdq %xmm1,%xmm6
+ 4e1:	66 48 0f 7e e3       	movq   %xmm4,%rbx
+ 4e6:	48 8b 68 70          	mov    0x70(%rax),%rbp
+ 4ea:	66 48 0f 6e c9       	movq   %rcx,%xmm1
+ 4ef:	66 48 0f 7e f9       	movq   %xmm7,%rcx
+ 4f4:	48 c1 c3 12          	rol    $0x12,%rbx
+ 4f8:	66 0f 73 dc 08       	psrldq $0x8,%xmm4
+ 4fd:	48 c1 c1 15          	rol    $0x15,%rcx
+ 501:	0f 11 74 24 78       	movups %xmm6,0x78(%rsp)
+ 506:	66 48 0f 6e f9       	movq   %rcx,%xmm7
+ 50b:	48 8b 88 98 00 00 00 	mov    0x98(%rax),%rcx
+ 512:	48 89 6c 24 70       	mov    %rbp,0x70(%rsp)
+ 517:	66 0f 6c cf          	punpcklqdq %xmm7,%xmm1
+ 51b:	66 48 0f 6e fb       	movq   %rbx,%xmm7
+ 520:	66 48 0f 7e db       	movq   %xmm3,%rbx
+ 525:	66 0f 73 db 08       	psrldq $0x8,%xmm3
+ 52a:	48 31 d1             	xor    %rdx,%rcx
+ 52d:	48 c1 cb 03          	ror    $0x3,%rbx
+ 531:	48 33 90 c0 00 00 00 	xor    0xc0(%rax),%rdx
+ 538:	0f 11 8c 24 88 00 00 	movups %xmm1,0x88(%rsp)
+ 53f:	00 
+ 540:	48 c1 c1 08          	rol    $0x8,%rcx
+ 544:	66 48 0f 6e c1       	movq   %rcx,%xmm0
+ 549:	66 48 0f 7e e1       	movq   %xmm4,%rcx
+ 54e:	66 48 0f 6e e3       	movq   %rbx,%xmm4
+ 553:	66 0f 6c c7          	punpcklqdq %xmm7,%xmm0
+ 557:	48 c1 c1 02          	rol    $0x2,%rcx
+ 55b:	66 48 0f 7e f3       	movq   %xmm6,%rbx
+ 560:	66 0f 6f f8          	movdqa %xmm0,%xmm7
+ 564:	0f 11 80 98 00 00 00 	movups %xmm0,0x98(%rax)
+ 56b:	66 48 0f 6e c1       	movq   %rcx,%xmm0
+ 570:	66 48 0f 7e d9       	movq   %xmm3,%rcx
+ 575:	66 0f 6c c4          	punpcklqdq %xmm4,%xmm0
+ 579:	48 c1 c9 08          	ror    $0x8,%rcx
+ 57d:	f3 0f 6f 60 50       	movdqu 0x50(%rax),%xmm4
+ 582:	66 0f d6 bc 24 98 00 	movq   %xmm7,0x98(%rsp)
+ 589:	00 00 
+ 58b:	0f 11 80 a8 00 00 00 	movups %xmm0,0xa8(%rax)
+ 592:	66 48 0f 6e c1       	movq   %rcx,%xmm0
+ 597:	48 89 d1             	mov    %rdx,%rcx
+ 59a:	f3 0f 6f b0 a0 00 00 	movdqu 0xa0(%rax),%xmm6
+ 5a1:	00 
+ 5a2:	48 c1 c1 0e          	rol    $0xe,%rcx
+ 5a6:	0f 29 64 24 50       	movaps %xmm4,0x50(%rsp)
+ 5ab:	f3 0f 6f 60 60       	movdqu 0x60(%rax),%xmm4
+ 5b0:	4c 8b a0 b0 00 00 00 	mov    0xb0(%rax),%r12
+ 5b7:	66 48 0f 6e d9       	movq   %rcx,%xmm3
+ 5bc:	0f 29 b4 24 a0 00 00 	movaps %xmm6,0xa0(%rsp)
+ 5c3:	00 
+ 5c4:	48 8b 88 a0 00 00 00 	mov    0xa0(%rax),%rcx
+ 5cb:	66 0f 6c c3          	punpcklqdq %xmm3,%xmm0
+ 5cf:	0f 29 64 24 60       	movaps %xmm4,0x60(%rsp)
+ 5d4:	0f 11 80 b8 00 00 00 	movups %xmm0,0xb8(%rax)
+ 5db:	f3 0f 6f b0 b0 00 00 	movdqu 0xb0(%rax),%xmm6
+ 5e2:	00 
+ 5e3:	0f 29 b4 24 b0 00 00 	movaps %xmm6,0xb0(%rsp)
+ 5ea:	00 
+ 5eb:	48 8b 90 c0 00 00 00 	mov    0xc0(%rax),%rdx
+ 5f2:	4c 89 40 28          	mov    %r8,0x28(%rax)
+ 5f6:	4c 8b 44 24 40       	mov    0x40(%rsp),%r8
+ 5fb:	48 89 48 70          	mov    %rcx,0x70(%rax)
+ 5ff:	48 8b 4c 24 30       	mov    0x30(%rsp),%rcx
+ 604:	4c 89 48 50          	mov    %r9,0x50(%rax)
+ 608:	4c 8b 4c 24 68       	mov    0x68(%rsp),%r9
+ 60d:	48 89 48 08          	mov    %rcx,0x8(%rax)
+ 611:	48 8b 4c 24 58       	mov    0x58(%rsp),%rcx
+ 616:	48 89 50 20          	mov    %rdx,0x20(%rax)
+ 61a:	f3 44 0f 6f 10       	movdqu (%rax),%xmm10
+ 61f:	48 89 94 24 c0 00 00 	mov    %rdx,0xc0(%rsp)
+ 626:	00 
+ 627:	4c 89 c2             	mov    %r8,%rdx
+ 62a:	4c 89 48 60          	mov    %r9,0x60(%rax)
+ 62e:	4c 8b 8c 24 90 00 00 	mov    0x90(%rsp),%r9
+ 635:	00 
+ 636:	48 f7 d2             	not    %rdx
+ 639:	66 41 0f 6f e2       	movdqa %xmm10,%xmm4
+ 63e:	48 89 88 88 00 00 00 	mov    %rcx,0x88(%rax)
+ 645:	48 21 ea             	and    %rbp,%rdx
+ 648:	48 8b 8c 24 80 00 00 	mov    0x80(%rsp),%rcx
+ 64f:	00 
+ 650:	4c 89 48 18          	mov    %r9,0x18(%rax)
+ 654:	48 31 fa             	xor    %rdi,%rdx
+ 657:	4c 8b 8c 24 b8 00 00 	mov    0xb8(%rsp),%r9
+ 65e:	00 
+ 65f:	48 89 48 40          	mov    %rcx,0x40(%rax)
+ 663:	48 8b 8c 24 a8 00 00 	mov    0xa8(%rsp),%rcx
+ 66a:	00 
+ 66b:	4c 89 68 10          	mov    %r13,0x10(%rax)
+ 66f:	f3 44 0f 6f 58 10    	movdqu 0x10(%rax),%xmm11
+ 675:	66 0f d6 90 80 00 00 	movq   %xmm2,0x80(%rax)
+ 67c:	00 
+ 67d:	66 0f 76 d2          	pcmpeqd %xmm2,%xmm2
+ 681:	66 0f d6 68 58       	movq   %xmm5,0x58(%rax)
+ 686:	f3 0f 6f 68 20       	movdqu 0x20(%rax),%xmm5
+ 68b:	66 0f ef e2          	pxor   %xmm2,%xmm4
+ 68f:	66 45 0f 6f cb       	movdqa %xmm11,%xmm9
+ 694:	66 0f d6 78 68       	movq   %xmm7,0x68(%rax)
+ 699:	66 44 0f ef ca       	pxor   %xmm2,%xmm9
+ 69e:	66 0f 6f dc          	movdqa %xmm4,%xmm3
+ 6a2:	4c 89 70 38          	mov    %r14,0x38(%rax)
+ 6a6:	66 44 0f 6f c5       	movdqa %xmm5,%xmm8
+ 6ab:	66 44 0f 6f e5       	movdqa %xmm5,%xmm12
+ 6b0:	66 41 0f c6 d9 01    	shufpd $0x1,%xmm9,%xmm3
+ 6b6:	4c 89 60 48          	mov    %r12,0x48(%rax)
+ 6ba:	66 44 0f ef c2       	pxor   %xmm2,%xmm8
+ 6bf:	66 41 0f db db       	pand   %xmm11,%xmm3
+ 6c4:	66 45 0f 6c e2       	punpcklqdq %xmm10,%xmm12
+ 6c9:	4c 89 50 78          	mov    %r10,0x78(%rax)
+ 6cd:	66 41 0f ef da       	pxor   %xmm10,%xmm3
+ 6d2:	66 45 0f c6 c8 01    	shufpd $0x1,%xmm8,%xmm9
+ 6d8:	66 45 0f db cc       	pand   %xmm12,%xmm9
+ 6dd:	66 0f d6 88 90 00 00 	movq   %xmm1,0x90(%rax)
+ 6e4:	00 
+ 6e5:	66 45 0f ef cb       	pxor   %xmm11,%xmm9
+ 6ea:	4c 89 88 98 00 00 00 	mov    %r9,0x98(%rax)
+ 6f1:	4c 89 58 30          	mov    %r11,0x30(%rax)
+ 6f5:	f3 0f 6f 70 30       	movdqu 0x30(%rax),%xmm6
+ 6fa:	f3 0f 6f 78 40       	movdqu 0x40(%rax),%xmm7
+ 6ff:	48 89 90 a0 00 00 00 	mov    %rdx,0xa0(%rax)
+ 706:	48 89 ea             	mov    %rbp,%rdx
+ 709:	48 f7 d2             	not    %rdx
+ 70c:	66 0f 6f ce          	movdqa %xmm6,%xmm1
+ 710:	66 44 0f 6d d6       	punpckhqdq %xmm6,%xmm10
+ 715:	0f 11 18             	movups %xmm3,(%rax)
+ 718:	66 0f 6f c7          	movdqa %xmm7,%xmm0
+ 71c:	48 21 da             	and    %rbx,%rdx
+ 71f:	66 0f ef ca          	pxor   %xmm2,%xmm1
+ 723:	44 0f 11 48 10       	movups %xmm9,0x10(%rax)
+ 728:	66 0f ef c2          	pxor   %xmm2,%xmm0
+ 72c:	4c 31 c2             	xor    %r8,%rdx
+ 72f:	66 0f 6c e1          	punpcklqdq %xmm1,%xmm4
+ 733:	48 89 90 a8 00 00 00 	mov    %rdx,0xa8(%rax)
+ 73a:	66 0f c6 c8 01       	shufpd $0x1,%xmm0,%xmm1
+ 73f:	48 89 da             	mov    %rbx,%rdx
+ 742:	66 0f db cf          	pand   %xmm7,%xmm1
+ 746:	66 0f ef ce          	pxor   %xmm6,%xmm1
+ 74a:	48 f7 d2             	not    %rdx
+ 74d:	66 41 0f db e2       	pand   %xmm10,%xmm4
+ 752:	f3 44 0f 6f 50 60    	movdqu 0x60(%rax),%xmm10
+ 758:	48 21 ca             	and    %rcx,%rdx
+ 75b:	0f 11 48 30          	movups %xmm1,0x30(%rax)
+ 75f:	f3 0f 6f 48 50       	movdqu 0x50(%rax),%xmm1
+ 764:	66 0f ef e5          	pxor   %xmm5,%xmm4
+ 768:	48 31 ea             	xor    %rbp,%rdx
+ 76b:	66 41 0f 6d c0       	punpckhqdq %xmm8,%xmm0
+ 770:	66 0f c6 ee 01       	shufpd $0x1,%xmm6,%xmm5
+ 775:	66 45 0f 6f da       	movdqa %xmm10,%xmm11
+ 77a:	66 44 0f 6f c9       	movdqa %xmm1,%xmm9
+ 77f:	66 0f db c5          	pand   %xmm5,%xmm0
+ 783:	48 89 90 b0 00 00 00 	mov    %rdx,0xb0(%rax)
+ 78a:	48 89 ca             	mov    %rcx,%rdx
+ 78d:	66 44 0f ef ca       	pxor   %xmm2,%xmm9
+ 792:	48 f7 d2             	not    %rdx
+ 795:	66 0f ef c7          	pxor   %xmm7,%xmm0
+ 799:	0f 11 60 20          	movups %xmm4,0x20(%rax)
+ 79d:	f3 0f 6f b0 80 00 00 	movdqu 0x80(%rax),%xmm6
+ 7a4:	00 
+ 7a5:	66 44 0f ef da       	pxor   %xmm2,%xmm11
+ 7aa:	66 41 0f 6f e9       	movdqa %xmm9,%xmm5
+ 7af:	48 21 fa             	and    %rdi,%rdx
+ 7b2:	48 31 da             	xor    %rbx,%rdx
+ 7b5:	66 41 0f c6 eb 01    	shufpd $0x1,%xmm11,%xmm5
+ 7bb:	0f 11 40 40          	movups %xmm0,0x40(%rax)
+ 7bf:	66 41 0f db ea       	pand   %xmm10,%xmm5
+ 7c4:	f3 0f 6f 40 70       	movdqu 0x70(%rax),%xmm0
+ 7c9:	48 f7 d7             	not    %rdi
+ 7cc:	66 0f ef e9          	pxor   %xmm1,%xmm5
+ 7d0:	66 0f 6f e6          	movdqa %xmm6,%xmm4
+ 7d4:	f3 0f 6f b8 90 00 00 	movdqu 0x90(%rax),%xmm7
+ 7db:	00 
+ 7dc:	48 89 90 b8 00 00 00 	mov    %rdx,0xb8(%rax)
+ 7e3:	48 89 fa             	mov    %rdi,%rdx
+ 7e6:	66 0f ef e2          	pxor   %xmm2,%xmm4
+ 7ea:	66 44 0f 6f c0       	movdqa %xmm0,%xmm8
+ 7ef:	0f 11 68 50          	movups %xmm5,0x50(%rax)
+ 7f3:	4c 21 c2             	and    %r8,%rdx
+ 7f6:	66 0f 6f e8          	movdqa %xmm0,%xmm5
+ 7fa:	66 44 0f ef c2       	pxor   %xmm2,%xmm8
+ 7ff:	66 0f 6c e9          	punpcklqdq %xmm1,%xmm5
+ 803:	66 0f ef d7          	pxor   %xmm7,%xmm2
+ 807:	48 31 ca             	xor    %rcx,%rdx
+ 80a:	66 44 0f 6c cc       	punpcklqdq %xmm4,%xmm9
+ 80f:	66 0f 6d ce          	punpckhqdq %xmm6,%xmm1
+ 813:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 81a <KeccakP1600Round+0x5ea>
+ 81a:	66 0f c6 e2 01       	shufpd $0x1,%xmm2,%xmm4
+ 81f:	48 89 90 c0 00 00 00 	mov    %rdx,0xc0(%rax)
+ 826:	66 41 0f db c9       	pand   %xmm9,%xmm1
+ 82b:	66 41 0f 6d d0       	punpckhqdq %xmm8,%xmm2
+ 830:	66 48 0f 7e da       	movq   %xmm3,%rdx
+ 835:	48 33 14 f1          	xor    (%rcx,%rsi,8),%rdx
+ 839:	66 0f ef c8          	pxor   %xmm0,%xmm1
+ 83d:	66 0f db e7          	pand   %xmm7,%xmm4
+ 841:	66 45 0f c6 d8 01    	shufpd $0x1,%xmm8,%xmm11
+ 847:	66 0f c6 c6 01       	shufpd $0x1,%xmm6,%xmm0
+ 84c:	66 41 0f db eb       	pand   %xmm11,%xmm5
+ 851:	66 0f db c2          	pand   %xmm2,%xmm0
+ 855:	48 89 10             	mov    %rdx,(%rax)
+ 858:	66 41 0f ef ea       	pxor   %xmm10,%xmm5
+ 85d:	66 0f ef e6          	pxor   %xmm6,%xmm4
+ 861:	66 0f ef c7          	pxor   %xmm7,%xmm0
+ 865:	0f 11 48 70          	movups %xmm1,0x70(%rax)
+ 869:	0f 11 68 60          	movups %xmm5,0x60(%rax)
+ 86d:	0f 11 a0 80 00 00 00 	movups %xmm4,0x80(%rax)
+ 874:	0f 11 80 90 00 00 00 	movups %xmm0,0x90(%rax)
+ 87b:	48 8b 84 24 c8 00 00 	mov    0xc8(%rsp),%rax
+ 882:	00 
+ 883:	64 48 2b 04 25 28 00 	sub    %fs:0x28,%rax
+ 88a:	00 00 
+ 88c:	75 10                	jne    89e <KeccakP1600Round+0x66e>
+ 88e:	48 81 c4 d0 00 00 00 	add    $0xd0,%rsp
+ 895:	5b                   	pop    %rbx
+ 896:	5d                   	pop    %rbp
+ 897:	41 5c                	pop    %r12
+ 899:	41 5d                	pop    %r13
+ 89b:	41 5e                	pop    %r14
+ 89d:	c3                   	ret    
+ 89e:	e8 00 00 00 00       	call   8a3 <KeccakP1600Round+0x673>
+ 8a3:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 8aa:	00 00 00 00 
+ 8ae:	66 90                	xchg   %ax,%ax
+
+00000000000008b0 <KeccakP1600OnWords>:
+ 8b0:	f3 0f 1e fa          	endbr64 
+ 8b4:	55                   	push   %rbp
+ 8b5:	53                   	push   %rbx
+ 8b6:	bb 18 00 00 00       	mov    $0x18,%ebx
+ 8bb:	29 f3                	sub    %esi,%ebx
+ 8bd:	48 83 ec 08          	sub    $0x8,%rsp
+ 8c1:	83 fb 17             	cmp    $0x17,%ebx
+ 8c4:	77 1c                	ja     8e2 <KeccakP1600OnWords+0x32>
+ 8c6:	48 89 fd             	mov    %rdi,%rbp
+ 8c9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 8d0:	89 de                	mov    %ebx,%esi
+ 8d2:	48 89 ef             	mov    %rbp,%rdi
+ 8d5:	83 c3 01             	add    $0x1,%ebx
+ 8d8:	e8 00 00 00 00       	call   8dd <KeccakP1600OnWords+0x2d>
+ 8dd:	83 fb 18             	cmp    $0x18,%ebx
+ 8e0:	75 ee                	jne    8d0 <KeccakP1600OnWords+0x20>
+ 8e2:	48 83 c4 08          	add    $0x8,%rsp
+ 8e6:	5b                   	pop    %rbx
+ 8e7:	5d                   	pop    %rbp
+ 8e8:	c3                   	ret    
+ 8e9:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+00000000000008f0 <KeccakP1600_Permute_Nrounds>:
+ 8f0:	f3 0f 1e fa          	endbr64 
+ 8f4:	55                   	push   %rbp
+ 8f5:	53                   	push   %rbx
+ 8f6:	bb 18 00 00 00       	mov    $0x18,%ebx
+ 8fb:	29 f3                	sub    %esi,%ebx
+ 8fd:	48 83 ec 08          	sub    $0x8,%rsp
+ 901:	83 fb 17             	cmp    $0x17,%ebx
+ 904:	77 1c                	ja     922 <KeccakP1600_Permute_Nrounds+0x32>
+ 906:	48 89 fd             	mov    %rdi,%rbp
+ 909:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+ 910:	89 de                	mov    %ebx,%esi
+ 912:	48 89 ef             	mov    %rbp,%rdi
+ 915:	83 c3 01             	add    $0x1,%ebx
+ 918:	e8 00 00 00 00       	call   91d <KeccakP1600_Permute_Nrounds+0x2d>
+ 91d:	83 fb 18             	cmp    $0x18,%ebx
+ 920:	75 ee                	jne    910 <KeccakP1600_Permute_Nrounds+0x20>
+ 922:	48 83 c4 08          	add    $0x8,%rsp
+ 926:	5b                   	pop    %rbx
+ 927:	5d                   	pop    %rbp
+ 928:	c3                   	ret    
+ 929:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+0000000000000930 <KeccakP1600_Permute_12rounds>:
+ 930:	f3 0f 1e fa          	endbr64 
+ 934:	55                   	push   %rbp
+ 935:	48 89 fd             	mov    %rdi,%rbp
+ 938:	53                   	push   %rbx
+ 939:	bb 0c 00 00 00       	mov    $0xc,%ebx
+ 93e:	48 83 ec 08          	sub    $0x8,%rsp
+ 942:	66 0f 1f 44 00 00    	nopw   0x0(%rax,%rax,1)
+ 948:	89 de                	mov    %ebx,%esi
+ 94a:	48 89 ef             	mov    %rbp,%rdi
+ 94d:	83 c3 01             	add    $0x1,%ebx
+ 950:	e8 00 00 00 00       	call   955 <KeccakP1600_Permute_12rounds+0x25>
+ 955:	83 fb 18             	cmp    $0x18,%ebx
+ 958:	75 ee                	jne    948 <KeccakP1600_Permute_12rounds+0x18>
+ 95a:	48 83 c4 08          	add    $0x8,%rsp
+ 95e:	5b                   	pop    %rbx
+ 95f:	5d                   	pop    %rbp
+ 960:	c3                   	ret    
+ 961:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ 968:	00 00 00 00 
+ 96c:	0f 1f 40 00          	nopl   0x0(%rax)
+
+0000000000000970 <KeccakP1600_Permute_24rounds>:
+ 970:	f3 0f 1e fa          	endbr64 
+ 974:	55                   	push   %rbp
+ 975:	48 89 fd             	mov    %rdi,%rbp
+ 978:	53                   	push   %rbx
+ 979:	31 db                	xor    %ebx,%ebx
+ 97b:	48 83 ec 08          	sub    $0x8,%rsp
+ 97f:	90                   	nop
+ 980:	89 de                	mov    %ebx,%esi
+ 982:	48 89 ef             	mov    %rbp,%rdi
+ 985:	83 c3 01             	add    $0x1,%ebx
+ 988:	e8 00 00 00 00       	call   98d <KeccakP1600_Permute_24rounds+0x1d>
+ 98d:	83 fb 18             	cmp    $0x18,%ebx
+ 990:	75 ee                	jne    980 <KeccakP1600_Permute_24rounds+0x10>
+ 992:	48 83 c4 08          	add    $0x8,%rsp
+ 996:	5b                   	pop    %rbx
+ 997:	5d                   	pop    %rbp
+ 998:	c3                   	ret    
+ 999:	0f 1f 80 00 00 00 00 	nopl   0x0(%rax)
+
+00000000000009a0 <KeccakP1600_ExtractBytes>:
+ 9a0:	f3 0f 1e fa          	endbr64 
+ 9a4:	48 83 ec 08          	sub    $0x8,%rsp
+ 9a8:	81 fa c7 00 00 00    	cmp    $0xc7,%edx
+ 9ae:	77 25                	ja     9d5 <KeccakP1600_ExtractBytes+0x35>
+ 9b0:	8d 04 0a             	lea    (%rdx,%rcx,1),%eax
+ 9b3:	3d c8 00 00 00       	cmp    $0xc8,%eax
+ 9b8:	77 3a                	ja     9f4 <KeccakP1600_ExtractBytes+0x54>
+ 9ba:	49 89 f1             	mov    %rsi,%r9
+ 9bd:	89 d2                	mov    %edx,%edx
+ 9bf:	41 89 c8             	mov    %ecx,%r8d
+ 9c2:	48 83 c4 08          	add    $0x8,%rsp
+ 9c6:	48 8d 34 17          	lea    (%rdi,%rdx,1),%rsi
+ 9ca:	4c 89 c2             	mov    %r8,%rdx
+ 9cd:	4c 89 cf             	mov    %r9,%rdi
+ 9d0:	e9 00 00 00 00       	jmp    9d5 <KeccakP1600_ExtractBytes+0x35>
+ 9d5:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 9dc <KeccakP1600_ExtractBytes+0x3c>
+ 9dc:	ba da 00 00 00       	mov    $0xda,%edx
+ 9e1:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # 9e8 <KeccakP1600_ExtractBytes+0x48>
+ 9e8:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # 9ef <KeccakP1600_ExtractBytes+0x4f>
+ 9ef:	e8 00 00 00 00       	call   9f4 <KeccakP1600_ExtractBytes+0x54>
+ 9f4:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # 9fb <KeccakP1600_ExtractBytes+0x5b>
+ 9fb:	ba db 00 00 00       	mov    $0xdb,%edx
+ a00:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # a07 <KeccakP1600_ExtractBytes+0x67>
+ a07:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # a0e <KeccakP1600_ExtractBytes+0x6e>
+ a0e:	e8 00 00 00 00       	call   a13 <KeccakP1600_ExtractBytes+0x73>
+ a13:	66 66 2e 0f 1f 84 00 	data16 cs nopw 0x0(%rax,%rax,1)
+ a1a:	00 00 00 00 
+ a1e:	66 90                	xchg   %ax,%ax
+
+0000000000000a20 <KeccakP1600_ExtractAndAddBytes>:
+ a20:	f3 0f 1e fa          	endbr64 
+ a24:	48 83 ec 08          	sub    $0x8,%rsp
+ a28:	81 f9 c7 00 00 00    	cmp    $0xc7,%ecx
+ a2e:	77 3d                	ja     a6d <KeccakP1600_ExtractAndAddBytes+0x4d>
+ a30:	42 8d 04 01          	lea    (%rcx,%r8,1),%eax
+ a34:	3d c8 00 00 00       	cmp    $0xc8,%eax
+ a39:	77 51                	ja     a8c <KeccakP1600_ExtractAndAddBytes+0x6c>
+ a3b:	49 89 f1             	mov    %rsi,%r9
+ a3e:	45 89 c2             	mov    %r8d,%r10d
+ a41:	31 c0                	xor    %eax,%eax
+ a43:	45 85 c0             	test   %r8d,%r8d
+ a46:	74 20                	je     a68 <KeccakP1600_ExtractAndAddBytes+0x48>
+ a48:	0f 1f 84 00 00 00 00 	nopl   0x0(%rax,%rax,1)
+ a4f:	00 
+ a50:	8d 34 01             	lea    (%rcx,%rax,1),%esi
+ a53:	0f b6 34 37          	movzbl (%rdi,%rsi,1),%esi
+ a57:	41 32 34 01          	xor    (%r9,%rax,1),%sil
+ a5b:	40 88 34 02          	mov    %sil,(%rdx,%rax,1)
+ a5f:	48 83 c0 01          	add    $0x1,%rax
+ a63:	49 39 c2             	cmp    %rax,%r10
+ a66:	75 e8                	jne    a50 <KeccakP1600_ExtractAndAddBytes+0x30>
+ a68:	48 83 c4 08          	add    $0x8,%rsp
+ a6c:	c3                   	ret    
+ a6d:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # a74 <KeccakP1600_ExtractAndAddBytes+0x54>
+ a74:	ba e5 00 00 00       	mov    $0xe5,%edx
+ a79:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # a80 <KeccakP1600_ExtractAndAddBytes+0x60>
+ a80:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # a87 <KeccakP1600_ExtractAndAddBytes+0x67>
+ a87:	e8 00 00 00 00       	call   a8c <KeccakP1600_ExtractAndAddBytes+0x6c>
+ a8c:	48 8d 0d 00 00 00 00 	lea    0x0(%rip),%rcx        # a93 <KeccakP1600_ExtractAndAddBytes+0x73>
+ a93:	ba e6 00 00 00       	mov    $0xe6,%edx
+ a98:	48 8d 35 00 00 00 00 	lea    0x0(%rip),%rsi        # a9f <KeccakP1600_ExtractAndAddBytes+0x7f>
+ a9f:	48 8d 3d 00 00 00 00 	lea    0x0(%rip),%rdi        # aa6 <KeccakP1600_ExtractAndAddBytes+0x86>
+ aa6:	e8 00 00 00 00       	call   aab <KeccakP1600_ExtractAndAddBytes+0x8b>
+ aab:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000000ab0 <KeccakP1600_DisplayRoundConstants>:
+ ab0:	f3 0f 1e fa          	endbr64 
+ ab4:	41 57                	push   %r15
+ ab6:	49 89 ff             	mov    %rdi,%r15
+ ab9:	41 56                	push   %r14
+ abb:	4c 8d 35 00 00 00 00 	lea    0x0(%rip),%r14        # ac2 <KeccakP1600_DisplayRoundConstants+0x12>
+ ac2:	41 55                	push   %r13
+ ac4:	4c 8d 2d 00 00 00 00 	lea    0x0(%rip),%r13        # acb <KeccakP1600_DisplayRoundConstants+0x1b>
+ acb:	41 54                	push   %r12
+ acd:	4c 8d 25 00 00 00 00 	lea    0x0(%rip),%r12        # ad4 <KeccakP1600_DisplayRoundConstants+0x24>
+ ad4:	55                   	push   %rbp
+ ad5:	53                   	push   %rbx
+ ad6:	31 db                	xor    %ebx,%ebx
+ ad8:	48 83 ec 08          	sub    $0x8,%rsp
+ adc:	0f 1f 40 00          	nopl   0x0(%rax)
+ ae0:	89 d9                	mov    %ebx,%ecx
+ ae2:	4c 89 f2             	mov    %r14,%rdx
+ ae5:	be 01 00 00 00       	mov    $0x1,%esi
+ aea:	4c 89 ff             	mov    %r15,%rdi
+ aed:	31 c0                	xor    %eax,%eax
+ aef:	e8 00 00 00 00       	call   af4 <KeccakP1600_DisplayRoundConstants+0x44>
+ af4:	49 8b 6c dd 00       	mov    0x0(%r13,%rbx,8),%rbp
+ af9:	4c 89 e2             	mov    %r12,%rdx
+ afc:	4c 89 ff             	mov    %r15,%rdi
+ aff:	be 01 00 00 00       	mov    $0x1,%esi
+ b04:	48 83 c3 01          	add    $0x1,%rbx
+ b08:	48 89 e8             	mov    %rbp,%rax
+ b0b:	48 c1 e8 20          	shr    $0x20,%rax
+ b0f:	48 89 c1             	mov    %rax,%rcx
+ b12:	31 c0                	xor    %eax,%eax
+ b14:	e8 00 00 00 00       	call   b19 <KeccakP1600_DisplayRoundConstants+0x69>
+ b19:	89 e9                	mov    %ebp,%ecx
+ b1b:	4c 89 e2             	mov    %r12,%rdx
+ b1e:	be 01 00 00 00       	mov    $0x1,%esi
+ b23:	4c 89 ff             	mov    %r15,%rdi
+ b26:	31 c0                	xor    %eax,%eax
+ b28:	e8 00 00 00 00       	call   b2d <KeccakP1600_DisplayRoundConstants+0x7d>
+ b2d:	4c 89 fe             	mov    %r15,%rsi
+ b30:	bf 0a 00 00 00       	mov    $0xa,%edi
+ b35:	e8 00 00 00 00       	call   b3a <KeccakP1600_DisplayRoundConstants+0x8a>
+ b3a:	48 83 fb 18          	cmp    $0x18,%rbx
+ b3e:	75 a0                	jne    ae0 <KeccakP1600_DisplayRoundConstants+0x30>
+ b40:	48 83 c4 08          	add    $0x8,%rsp
+ b44:	4c 89 fe             	mov    %r15,%rsi
+ b47:	bf 0a 00 00 00       	mov    $0xa,%edi
+ b4c:	5b                   	pop    %rbx
+ b4d:	5d                   	pop    %rbp
+ b4e:	41 5c                	pop    %r12
+ b50:	41 5d                	pop    %r13
+ b52:	41 5e                	pop    %r14
+ b54:	41 5f                	pop    %r15
+ b56:	e9 00 00 00 00       	jmp    b5b <KeccakP1600_DisplayRoundConstants+0xab>
+ b5b:	0f 1f 44 00 00       	nopl   0x0(%rax,%rax,1)
+
+0000000000000b60 <KeccakP1600_DisplayRhoOffsets>:
+ b60:	f3 0f 1e fa          	endbr64 
+ b64:	41 57                	push   %r15
+ b66:	4c 8d 3d 00 00 00 00 	lea    0x0(%rip),%r15        # b6d <KeccakP1600_DisplayRhoOffsets+0xd>
+ b6d:	41 56                	push   %r14
+ b6f:	45 31 f6             	xor    %r14d,%r14d
+ b72:	41 55                	push   %r13
+ b74:	4c 8d 2d 00 00 00 00 	lea    0x0(%rip),%r13        # b7b <KeccakP1600_DisplayRhoOffsets+0x1b>
+ b7b:	41 54                	push   %r12
+ b7d:	55                   	push   %rbp
+ b7e:	48 89 fd             	mov    %rdi,%rbp
+ b81:	53                   	push   %rbx
+ b82:	48 83 ec 08          	sub    $0x8,%rsp
+ b86:	47 8d 24 b6          	lea    (%r14,%r14,4),%r12d
+ b8a:	31 db                	xor    %ebx,%ebx
+ b8c:	45 89 f0             	mov    %r14d,%r8d
+ b8f:	89 d9                	mov    %ebx,%ecx
+ b91:	4c 89 fa             	mov    %r15,%rdx
+ b94:	be 01 00 00 00       	mov    $0x1,%esi
+ b99:	48 89 ef             	mov    %rbp,%rdi
+ b9c:	31 c0                	xor    %eax,%eax
+ b9e:	e8 00 00 00 00       	call   ba3 <KeccakP1600_DisplayRhoOffsets+0x43>
+ ba3:	41 8d 04 1c          	lea    (%r12,%rbx,1),%eax
+ ba7:	be 01 00 00 00       	mov    $0x1,%esi
+ bac:	48 89 ef             	mov    %rbp,%rdi
+ baf:	48 8d 15 00 00 00 00 	lea    0x0(%rip),%rdx        # bb6 <KeccakP1600_DisplayRhoOffsets+0x56>
+ bb6:	83 c3 01             	add    $0x1,%ebx
+ bb9:	8b 0c 82             	mov    (%rdx,%rax,4),%ecx
+ bbc:	4c 89 ea             	mov    %r13,%rdx
+ bbf:	31 c0                	xor    %eax,%eax
+ bc1:	e8 00 00 00 00       	call   bc6 <KeccakP1600_DisplayRhoOffsets+0x66>
+ bc6:	48 89 ee             	mov    %rbp,%rsi
+ bc9:	bf 0a 00 00 00       	mov    $0xa,%edi
+ bce:	e8 00 00 00 00       	call   bd3 <KeccakP1600_DisplayRhoOffsets+0x73>
+ bd3:	83 fb 05             	cmp    $0x5,%ebx
+ bd6:	75 b4                	jne    b8c <KeccakP1600_DisplayRhoOffsets+0x2c>
+ bd8:	41 83 c6 01          	add    $0x1,%r14d
+ bdc:	41 83 fe 05          	cmp    $0x5,%r14d
+ be0:	75 a4                	jne    b86 <KeccakP1600_DisplayRhoOffsets+0x26>
+ be2:	48 83 c4 08          	add    $0x8,%rsp
+ be6:	48 89 ee             	mov    %rbp,%rsi
+ be9:	bf 0a 00 00 00       	mov    $0xa,%edi
+ bee:	5b                   	pop    %rbx
+ bef:	5d                   	pop    %rbp
+ bf0:	41 5c                	pop    %r12
+ bf2:	41 5d                	pop    %r13
+ bf4:	41 5e                	pop    %r14
+ bf6:	41 5f                	pop    %r15
+ bf8:	e9 00 00 00 00       	jmp    bfd <KeccakP1600_DisplayRhoOffsets+0x9d>
