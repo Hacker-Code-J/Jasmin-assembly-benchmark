@@ -1,0 +1,363 @@
+% The produced LATEX snippet is meant to be included in a
+% jasmincode environment provided by the jasmin package
+% defined in file: 
+% https://github.com/jasmin-lang/jasmin/wiki/resources/jasmin.sty
+%
+\jasminkw{param} \jasmintype{int} \jasmindname{KECCAK_ROUNDS} = 24;\\
+\jasmintype{u64}[24] \jasmindname{KECCAK1600_RC} = \{ 
+0x0000000000000001, 0x0000000000008082, 0x800000000000808a,
+0x8000000080008000, 0x000000000000808b, 0x0000000080000001,
+0x8000000080008081, 0x8000000000008009, 0x000000000000008a,
+0x0000000000000088, 0x0000000080008009, 0x000000008000000a,
+0x000000008000808b, 0x800000000000008b, 0x8000000000008089,
+0x8000000000008003, 0x8000000000008002, 0x8000000000000080,
+0x000000000000800a, 0x800000008000000a, 0x8000000080008081,
+0x8000000000008080, 0x0000000080000001, 0x8000000080008008 \};\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__index_spec}(\jasminstorageclass{inline} \jasmintype{int} x y) \jasminarrow{} \jasminstorageclass{inline} \jasmintype{int} \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} r;\\
+\jasminindent{1}r = x \% 5 + 5 * y \% 5;\\
+\jasminindent{1}\jasminkw{return} r;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccak_rho_offsets_spec}(\jasminstorageclass{inline} \jasmintype{int} i) \jasminarrow{} \jasminstorageclass{inline} \jasmintype{int} \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} r x y z t;\\
+\jasminindent{1}r = 0;\\
+\jasminindent{1}x = 1;\\
+\jasminindent{1}y = 0;\\
+\jasminindent{1}\jasminkw{for} t = 0 \jasminkw{to} 24 \{\\
+\jasminindent{2}\jasminkw{if} i == x + 5 * y \{\\
+\jasminindent{3}r = (t + 1) * (t + 2) / 2 \% 64;\\
+\jasminindent{2}\}\\
+\jasminindent{2}z = (2 * x + 3 * y) \% 5;\\
+\jasminindent{2}x = y;\\
+\jasminindent{2}y = z;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} r;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__rhotates_spec}(\jasminstorageclass{inline} \jasmintype{int} x y) \jasminarrow{} \jasminstorageclass{inline} \jasmintype{int} \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} i r;\\
+\jasminindent{1}i = __index_spec(x, y);\\
+\jasminindent{1}r = __keccak_rho_offsets_spec(i);\\
+\jasminindent{1}\jasminkw{return} r;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__theta_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x y;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] c d;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}c[x] = 0;\\
+\jasminindent{2}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}c[x] \textasciicircum{}= a[x + 5 * y];\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}d[x] = c[(x + 1) \% 5];\\
+\jasminindent{2}_, _, d[x] = \#\jasminprimitive{ROL_64}(d[x], 1);\\
+\jasminindent{2}d[x] \textasciicircum{}= c[(x + 4) \% 5];\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}a[x + 5 * y] \textasciicircum{}= d[x];\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__rho_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x y i z;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}i = __index_spec(x, y);\\
+\jasminindent{3}z = __keccak_rho_offsets_spec(i);\\
+\jasminindent{3}_, _, a[i] = \#\jasminprimitive{ROL_64}(a[i], z);\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__pi_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x y i;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64}[25] b;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} t;\\
+\jasminindent{1}\jasminkw{for} i = 0 \jasminkw{to} 25 \{\\
+\jasminindent{2}t = a[i];\\
+\jasminindent{2}b[i] = t;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}t = b[x + 5 * y];\\
+\jasminindent{3}i = __index_spec(y, 2 * x + 3 * y);\\
+\jasminindent{3}a[i] = t;\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__chi_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x y i;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] c;\\
+\jasminindent{1}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}i = __index_spec(x + 1, y);\\
+\jasminindent{3}c[x] = a[i];\\
+\jasminindent{3}c[x] = ! c[x];\\
+\jasminindent{3}i = __index_spec(x + 2, y);\\
+\jasminindent{3}c[x] &= a[i];\\
+\jasminindent{3}i = __index_spec(x, y);\\
+\jasminindent{3}c[x] \textasciicircum{}= a[i];\\
+\jasminindent{2}\}\\
+\jasminindent{2}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}a[x + 5 * y] = c[x];\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__iota_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] a, \jasminstorageclass{reg} \jasmintype{u64} c) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}a[0] \textasciicircum{}= c;\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccakP1600_round_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} c) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}state = __theta_spec(state);\\
+\jasminindent{1}state = __rho_spec(state);\\
+\jasminindent{1}state = __pi_spec(state);\\
+\jasminindent{1}state = __chi_spec(state);\\
+\jasminindent{1}state = __iota_spec(state, c);\\
+\jasminindent{1}\jasminkw{return} state;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccakf1600_spec}(\jasminstorageclass{stack} \jasmintype{u64}[25] state) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} round RC;\\
+\jasminindent{1}\jasminstorageclass{reg ptr} \jasmintype{u64}[24] kRCp;\\
+\jasminindent{1}kRCp = KECCAK1600_RC;\\
+\jasminindent{1}round = 0;\\
+\jasminindent{1}\jasminkw{while}  (round <\jasmintype{u} 24) \{\\
+\jasminindent{2}RC = kRCp[(int) round];\\
+\jasminindent{2}state = __keccakP1600_round_spec(state, RC);\\
+\jasminindent{2}round += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} state;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__theta_sum_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64}[5] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x y;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] c;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}c[x] = a[x + 0];\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{for} y = 1 \jasminkw{to} 5 \{\\
+\jasminindent{2}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{3}c[x] \textasciicircum{}= a[x + y * 5];\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} c;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__theta_rol_ref}(\jasminstorageclass{reg} \jasmintype{u64}[5] c) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64}[5] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] d;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}d[x] = c[(x + 1) \% 5];\\
+\jasminindent{2}_, _, d[x] = \#\jasminprimitive{ROL_64}(d[x], 1);\\
+\jasminindent{2}d[x] \textasciicircum{}= c[(x - 1 + 5) \% 5];\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} d;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__rol_sum_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] a, \jasminstorageclass{reg} \jasmintype{u64}[5] d, \jasminstorageclass{inline} \jasmintype{int} y) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64}[5] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} r x x_ y_;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] b;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}x_ = (x + 3 * y) \% 5;\\
+\jasminindent{2}y_ = x;\\
+\jasminindent{2}r = __rhotates_spec(x_, y_);\\
+\jasminindent{2}b[x] = a[x_ + y_ * 5];\\
+\jasminindent{2}b[x] \textasciicircum{}= d[x_];\\
+\jasminindent{2}\jasminkw{if} r != 0 \{\\
+\jasminindent{3}_, _, b[x] = \#\jasminprimitive{ROL_64}(b[x], r);\\
+\jasminindent{2}\}\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} b;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__set_row_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] e, \jasminstorageclass{reg} \jasmintype{u64}[5] b, \jasminstorageclass{inline} \jasmintype{int} y, \jasminstorageclass{reg} \jasmintype{u64} rc) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} x x1 x2;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} t;\\
+\jasminindent{1}\jasminkw{for} x = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}x1 = (x + 1) \% 5;\\
+\jasminindent{2}x2 = (x + 2) \% 5;\\
+\jasminindent{2}t = b[x1];\\
+\jasminindent{2}t = ! t;\\
+\jasminindent{2}t &= b[x2];\\
+\jasminindent{2}t \textasciicircum{}= b[x];\\
+\jasminindent{2}\jasminkw{if} x == 0 && y == 0 \{\\
+\jasminindent{3}t \textasciicircum{}= rc;\\
+\jasminindent{2}\}\\
+\jasminindent{2}e[x + y * 5] = t;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} e;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__round_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] a, \jasminstorageclass{reg} \jasmintype{u64} rc) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} y;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64}[5] b c d;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64}[25] e;\\
+\jasminindent{1}c = __theta_sum_ref(a);\\
+\jasminindent{1}d = __theta_rol_ref(c);\\
+\jasminindent{1}\jasminkw{for} y = 0 \jasminkw{to} 5 \{\\
+\jasminindent{2}b = __rol_sum_ref(a, d, y);\\
+\jasminindent{2}e = __set_row_ref(e, b, y, rc);\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} e;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccakf1600_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] a) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{reg ptr} \jasmintype{u64}[24] RC;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64}[25] e;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} c rc;\\
+\jasminindent{1}RC = KECCAK1600_RC;\\
+\jasminindent{1}c = 0;\\
+\jasminindent{1}\jasminkw{while}  (c <\jasmintype{u} KECCAK_ROUNDS - 1) \{\\
+\jasminindent{2}rc = RC[(int) c];\\
+\jasminindent{2}e = __round_ref(a, rc);\\
+\jasminindent{2}rc = RC[(int) c + 1];\\
+\jasminindent{2}a = __round_ref(e, rc);\\
+\jasminindent{2}c += 2;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} a;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccak_init_ref}() \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64}[25] state;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} t;\\
+\jasminindent{1}\jasminstorageclass{inline} \jasmintype{int} i;\\
+\jasminindent{1}?\{
+\}, t = \#\jasminprimitive{set0}();\\
+\jasminindent{1}\jasminkw{for} i = 0 \jasminkw{to} 25 \{\\
+\jasminindent{2}state[i] = t;\\
+\jasminindent{1}\}\\
+\jasminindent{1}\jasminkw{return} state;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__add_full_block_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} in inlen, \jasminstorageclass{reg} \jasmintype{u64} rate) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25], \jasminstorageclass{reg} \jasmintype{u64}, \jasminstorageclass{reg} \jasmintype{u64} \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} i t rate64;\\
+\jasminindent{1}rate64 = rate;\\
+\jasminindent{1}rate64 >{}>\jasmintype{u}= 3;\\
+\jasminindent{1}i = 0;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} rate64) \{\\
+\jasminindent{2}t = [in + 8 * i];\\
+\jasminindent{2}state[(int) i] \textasciicircum{}= t;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}in += rate;\\
+\jasminindent{1}inlen -= rate;\\
+\jasminindent{1}\jasminkw{return} state, in, inlen;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__add_final_block_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} in inlen, \jasminstorageclass{reg} \jasmintype{u8} trail_byte, \jasminstorageclass{reg} \jasmintype{u64} rate) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25] \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} i t inlen8;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u8} c;\\
+\jasminindent{1}inlen8 = inlen;\\
+\jasminindent{1}inlen8 >{}>\jasmintype{u}= 3;\\
+\jasminindent{1}i = 0;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} inlen8) \{\\
+\jasminindent{2}t = [in + 8 * i];\\
+\jasminindent{2}state[(int) i] \textasciicircum{}= t;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}i <{}<= 3;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} inlen) \{\\
+\jasminindent{2}c = (\jasmintype{u8})[in + i];\\
+\jasminindent{2}state[\jasmintype{u8} (int) i] \textasciicircum{}= c;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}state[\jasmintype{u8} (int) i] \textasciicircum{}= trail_byte;\\
+\jasminindent{1}i = rate;\\
+\jasminindent{1}i -= 1;\\
+\jasminindent{1}state[\jasmintype{u8} (int) i] \textasciicircum{}= 0x80;\\
+\jasminindent{1}\jasminkw{return} state;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__absorb_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} in inlen, \jasminstorageclass{stack} \jasmintype{u8} s_trail_byte, \jasminstorageclass{reg} \jasmintype{u64} rate) \jasminarrow{} \jasminstorageclass{stack} \jasmintype{u64}[25], \jasminstorageclass{reg} \jasmintype{u64} \{\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64} s_in s_inlen s_rate;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u8} trail_byte;\\
+\jasminindent{1}\jasminkw{while}  (inlen >=\jasmintype{u} rate) \{\\
+\jasminindent{2}state, in, inlen = __add_full_block_ref(state, in, inlen, rate);\\
+\jasminindent{2}s_in = in;\\
+\jasminindent{2}s_inlen = inlen;\\
+\jasminindent{2}s_rate = rate;\\
+\jasminindent{2}state = __keccakf1600_ref(state);\\
+\jasminindent{2}in = s_in;\\
+\jasminindent{2}inlen = s_inlen;\\
+\jasminindent{2}rate = s_rate;\\
+\jasminindent{1}\}\\
+\jasminindent{1}trail_byte = s_trail_byte;\\
+\jasminindent{1}state = __add_final_block_ref(state, in, inlen, trail_byte, rate);\\
+\jasminindent{1}\jasminkw{return} state, rate;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__xtr_full_block_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} out outlen, \jasminstorageclass{reg} \jasmintype{u64} rate) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64}, \jasminstorageclass{reg} \jasmintype{u64} \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} i t rate64;\\
+\jasminindent{1}rate64 = rate;\\
+\jasminindent{1}rate64 >{}>\jasmintype{u}= 3;\\
+\jasminindent{1}i = 0;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} rate64) \{\\
+\jasminindent{2}t = state[(int) i];\\
+\jasminindent{2}[out + 8 * i] = t;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}out += rate;\\
+\jasminindent{1}outlen -= rate;\\
+\jasminindent{1}\jasminkw{return} out, outlen;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__xtr_bytes_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{reg} \jasmintype{u64} out outlen) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64} \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} i t outlen8;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u8} c;\\
+\jasminindent{1}outlen8 = outlen;\\
+\jasminindent{1}outlen8 >{}>\jasmintype{u}= 3;\\
+\jasminindent{1}i = 0;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} outlen8) \{\\
+\jasminindent{2}t = state[(int) i];\\
+\jasminindent{2}[out + 8 * i] = t;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}i <{}<= 3;\\
+\jasminindent{1}\jasminkw{while}  (i <\jasmintype{u} outlen) \{\\
+\jasminindent{2}c = state[\jasmintype{u8} (int) i];\\
+\jasminindent{2}(\jasmintype{u8})[out + i] = c;\\
+\jasminindent{2}i += 1;\\
+\jasminindent{1}\}\\
+\jasminindent{1}out += outlen;\\
+\jasminindent{1}\jasminkw{return} out;\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__squeeze_ref}(\jasminstorageclass{stack} \jasmintype{u64}[25] state, \jasminstorageclass{stack} \jasmintype{u64} s_out, \jasminstorageclass{reg} \jasmintype{u64} outlen, \jasminstorageclass{reg} \jasmintype{u64} rate) \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} out;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64} s_outlen s_rate;\\
+\jasminindent{1}\jasminkw{while}  (outlen >\jasmintype{u} rate) \{\\
+\jasminindent{2}s_outlen = outlen;\\
+\jasminindent{2}s_rate = rate;\\
+\jasminindent{2}state = __keccakf1600_ref(state);\\
+\jasminindent{2}out = s_out;\\
+\jasminindent{2}outlen = s_outlen;\\
+\jasminindent{2}rate = s_rate;\\
+\jasminindent{2}out, outlen = __xtr_full_block_ref(state, out, outlen, rate);\\
+\jasminindent{2}s_out = out;\\
+\jasminindent{1}\}\\
+\jasminindent{1}s_outlen = outlen;\\
+\jasminindent{1}state = __keccakf1600_ref(state);\\
+\jasminindent{1}out = s_out;\\
+\jasminindent{1}outlen = s_outlen;\\
+\jasminindent{1}out = __xtr_bytes_ref(state, out, outlen);\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__keccak1600_ref}(\jasminstorageclass{reg} \jasmintype{u64} out outlen in inlen, \jasminstorageclass{reg} \jasmintype{u8} trail_byte, \jasminstorageclass{reg} \jasmintype{u64} rate) \{\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64}[25] state;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u64} s_out s_outlen;\\
+\jasminindent{1}\jasminstorageclass{stack} \jasmintype{u8} s_trail_byte;\\
+\jasminindent{1}s_out = out;\\
+\jasminindent{1}s_outlen = outlen;\\
+\jasminindent{1}s_trail_byte = trail_byte;\\
+\jasminindent{1}state = __keccak_init_ref();\\
+\jasminindent{1}state, rate = __absorb_ref(state, in, inlen, s_trail_byte, rate);\\
+\jasminindent{1}outlen = s_outlen;\\
+\jasminindent{1}__squeeze_ref(state, s_out, outlen, rate);\\
+\}\\
+\jasminkw{fn} \jasmindname{_keccak1600_ref}(\jasminstorageclass{reg} \jasmintype{u64} out outlen in inlen, \jasminstorageclass{reg} \jasmintype{u8} trail_byte, \jasminstorageclass{reg} \jasmintype{u64} rate) \{\\
+\jasminindent{1}__keccak1600_ref(out, outlen, in, inlen, trail_byte, rate);\\
+\}\\
+\jasminkw{inline} \jasminkw{fn} \jasmindname{__sha3_256_ref}(\jasminstorageclass{reg} \jasmintype{u64} out in inlen) \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} outlen rate;\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u8} trail_byte;\\
+\jasminindent{1}outlen = 256 / 8;\\
+\jasminindent{1}trail_byte = 0x6;\\
+\jasminindent{1}rate = 1088 / 8;\\
+\jasminindent{1}_keccak1600_ref(out, outlen, in, inlen, trail_byte, rate);\\
+\}\\
+\jasminkw{export} \jasminkw{fn} \jasmindname{jade_hash_sha3_256_amd64}(\jasminstorageclass{reg} \jasmintype{u64} hash input input_length) \jasminarrow{} \jasminstorageclass{reg} \jasmintype{u64} \{\\
+\jasminindent{1}\jasminstorageclass{reg} \jasmintype{u64} r;\\
+\jasminindent{1}__sha3_256_ref(hash, input, input_length);\\
+\jasminindent{1}?\{
+\}, r = \#\jasminprimitive{set0}();\\
+\jasminindent{1}\jasminkw{return} r;\\
+\}

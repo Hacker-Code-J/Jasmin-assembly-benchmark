@@ -34,6 +34,15 @@
 // gcc -DJASMIN -O3 -o test_x86_64_libjade main.c sha3_256_ref_jasmin.o sha3_384_ref_jasmin.o sha3_512_ref_jasmin.o
 // gcc -DJASMIN -O3 -mavx2 -o test_avx2_libjade main.c sha3_256_avx2_jasmin.o sha3_384_avx2_jasmin.o sha3_512_avx2_jasmin.o
 
+/* DUMP (x86_64) */
+// as -o KeccakP-1600-x86-64.o KeccakP-1600-x86-64.s
+// gcc -O3 -march=native -o sha3_256.o -c main_sha3_256.c
+// gcc -O3 -march=native -no-pie -flto -funroll-loops -o dump_x86_64_xkcp main.c sha3_256.o KeccakP-1600-x86-64.o
+// as -o sha3_256_ref_jasmin.o sha3_256_ref.s
+// as -o sha3_384_ref_jasmin.o sha3_384_ref.s
+// as -o sha3_512_ref_jasmin.o sha3_512_ref.s
+// gcc -DJASMIN -O3 -funroll-loops -flto -o dump_x86_64_libjade main.c sha3_256_ref_jasmin.o
+
 /** Note
  * -fno-pie: This option disables position-independent executable (PIE) generation.
  *           PIE is a security feature that makes it harder for attackers to exploit vulnerabilities.
@@ -319,63 +328,64 @@
 #ifdef JASMIN
 extern int jade_hash_sha3_256_amd64(uint8_t *hash, const uint8_t *input, uint64_t input_length);
 #else
-int sha3(uint8_t *hash, const uint8_t *input, uint64_t input_length) {
-    KeccakP1600_plain8_state state;
-    unsigned int offset = 0;
+extern int sha3(uint8_t *hash, const uint8_t *input, uint64_t input_length);
+// int sha3(uint8_t *hash, const uint8_t *input, uint64_t input_length) {
+//     KeccakP1600_plain8_state state;
+//     unsigned int offset = 0;
 
-    // Initialize Keccak state
-    KeccakP1600_Initialize(&state);
+//     // Initialize Keccak state
+//     KeccakP1600_Initialize(&state);
 
-    // Absorb the input bytes
-    for (unsigned int i = 0; i < input_length; i++) {
-        KeccakP1600_AddByte(&state, input[i], offset);
-        offset = (offset + 1) % 200;  // Keccak state is 200 bytes
-    }
+//     // Absorb the input bytes
+//     for (unsigned int i = 0; i < input_length; i++) {
+//         KeccakP1600_AddByte(&state, input[i], offset);
+//         offset = (offset + 1) % 200;  // Keccak state is 200 bytes
+//     }
 
-    // // Debug: print state after absorbing
-    // printf("State after absorbing input:\n");
-    // for (int i = 0; i < 200; i++) {
-    //     printf("%02x ", state.A[i]);
-    // }
-    // printf("\n");
+//     // // Debug: print state after absorbing
+//     // printf("State after absorbing input:\n");
+//     // for (int i = 0; i < 200; i++) {
+//     //     printf("%02x ", state.A[i]);
+//     // }
+//     // printf("\n");
 
-    // Padding step: Add padding byte 0x06
-    KeccakP1600_AddByte(&state, 0x06, offset);
-    offset = (offset + 1) % 200;  // Move to the next offset
+//     // Padding step: Add padding byte 0x06
+//     KeccakP1600_AddByte(&state, 0x06, offset);
+//     offset = (offset + 1) % 200;  // Move to the next offset
 
-    // Add the 0x80 byte indicating the end of the message
-    KeccakP1600_AddByte(&state, 0x80, offset);
-    offset = (offset + 1) % 200;
+//     // Add the 0x80 byte indicating the end of the message
+//     KeccakP1600_AddByte(&state, 0x80, offset);
+//     offset = (offset + 1) % 200;
 
-    // // Debug: print state after padding
-    // printf("State after padding:\n");
-    // for (int i = 0; i < 200; i++) {
-    //     printf("%02x ", state.A[i]);
-    // }
-    // printf("\n");
+//     // // Debug: print state after padding
+//     // printf("State after padding:\n");
+//     // for (int i = 0; i < 200; i++) {
+//     //     printf("%02x ", state.A[i]);
+//     // }
+//     // printf("\n");
 
-    // Apply the 24 rounds of Keccak permutation
-    KeccakP1600_Permute_24rounds(&state);
+//     // Apply the 24 rounds of Keccak permutation
+//     KeccakP1600_Permute_24rounds(&state);
 
-    // // Debug: print state after permutation
-    // printf("State after permutation:\n");
-    // for (int i = 0; i < 200; i++) {
-    //     printf("%02x ", state.A[i]);
-    // }
-    // printf("\n");
+//     // // Debug: print state after permutation
+//     // printf("State after permutation:\n");
+//     // for (int i = 0; i < 200; i++) {
+//     //     printf("%02x ", state.A[i]);
+//     // }
+//     // printf("\n");
 
-    // Extract the hash (32 bytes for SHA3-256)
-    KeccakP1600_ExtractBytes(&state, hash, 0, 32); // For SHA3-256, we extract 32 bytes
+//     // Extract the hash (32 bytes for SHA3-256)
+//     KeccakP1600_ExtractBytes(&state, hash, 0, 32); // For SHA3-256, we extract 32 bytes
 
-    // // Debug: print the final hash
-    // printf("Extracted hash: ");
-    // for (int i = 0; i < 32; i++) {
-    //     printf("%02x", hash[i]);
-    // }
-    // printf("\n");
+//     // // Debug: print the final hash
+//     // printf("Extracted hash: ");
+//     // for (int i = 0; i < 32; i++) {
+//     //     printf("%02x", hash[i]);
+//     // }
+//     // printf("\n");
 
-    return 0; // Successful execution
-}
+//     return 0; // Successful execution
+// }
 #endif
 
 // Function to compare two byte arrays

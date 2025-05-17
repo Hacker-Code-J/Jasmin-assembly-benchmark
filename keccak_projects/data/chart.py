@@ -6,10 +6,10 @@ from collections import OrderedDict
 
 # ─── 1) map your CSV filenames in the exact order you want them plotted ───────
 files = OrderedDict([
-    ('[XKCP] SHA3 (C)'        , 'c_xkcp.csv'),
-    ('[XKCP] SHA3 (x86_64)'   , 'x86_64_xkcp.csv'),
-    ('[XKCP] SHA3 (AVX2)'     , 'avx2_xkcp.csv'),
-    # ('[Libjade] SHA3 (x86_64)', 'x86_64_libjade.csv'),
+    ('[XKCP] SHA3 (All C)'        , 'c_xkcp.csv'),
+    ('[XKCP] SHA3 (C) with KeccakP-1600 (x86_64)'   , 'x86_64_xkcp.csv'),
+    # ('[XKCP] SHA3 (C) with KeccakP-1600 (AVX2)'     , 'avx2_xkcp.csv'),
+    ('[Libjade] SHA3 (All x86_64)', 'x86_64_libjade.csv'),
     # ('[Libjade] SHA3 (AVX2)'  , 'avx2_libjade.csv'),
 ])
 
@@ -33,8 +33,10 @@ colors     = plt.cm.tab10.colors           # a palette of ≥5 distinct colors
 impl_color = {impl: colors[i] for i, impl in enumerate(impls)}
 linestyles = {
     'SHA3-256': '-',
-    'SHA3-384': '--',
-    'SHA3-512': ':',
+    # 'SHA3-384': '--',
+    # 'SHA3-512': ':',
+    'SHA3-384': '-',
+    'SHA3-512': '-',
 }
 
 # ─── 6) set up a 3×3 grid: rows=variant, cols=metric ──────────────────────────
@@ -56,11 +58,11 @@ for row, var in enumerate(variants):
                 color     = impl_color[impl],
                 linestyle = linestyles[var],
                 marker    = 'o',
-                markersize= 4,
+                markersize= 8,
                 label     = impl if (row, col) == (0, 0) else "_nolegend_"
             )
         if row == 0:
-            ax.set_title(title, pad=12)
+            ax.set_title(title, pad=12, fontsize=16, fontweight='bold')
         ax.grid(True, linestyle=':', linewidth=0.5)
 
 # ─── 8) only bottom row shows x‐axis ticks & labels ────────────────────────────
@@ -69,7 +71,7 @@ for ax in axes[:-1, :].flatten():
 
 for ax in axes[-1, :]:
     ax.set_xticks(x)
-    ax.set_xticklabels(x_lbl, rotation=45, ha='right')
+    ax.set_xticklabels(x_lbl, rotation=45, ha='center', fontsize=8.5, fontweight='bold')
 
 # ─── 9) big variant labels down the left margin ───────────────────────────────
 for row, var in enumerate(variants):
@@ -79,7 +81,8 @@ for row, var in enumerate(variants):
         transform=ax.transAxes,
         va='center', ha='center',
         rotation='vertical',
-        fontsize=14
+        fontsize=16,
+        fontweight='bold',
     )
 
 # ─── 10) shared legend at bottom, in our specified order ──────────────────────
@@ -93,7 +96,9 @@ fig.legend(
     loc='lower center',
     ncol=len(impls),
     frameon=False,
-    fontsize=10
+    fontsize=14,
+    title_fontproperties={'weight': 'bold', 'size': 16},
+    prop={'weight': 'bold'}
 )
 
 # ─── 11) tighten & save ───────────────────────────────────────────────────────
@@ -177,7 +182,7 @@ print("sha3_3x3_grid.png written.")
 #             transform=ax.transAxes,
 #             va='center', ha='center',
 #             rotation='vertical',
-#             fontsize=14)
+#             fontsize=16)
 
 # # ─── 11) shared legend at bottom ─────────────────────────────────────────────
 # proxies = [Line2D([0],[0],
@@ -189,7 +194,7 @@ print("sha3_3x3_grid.png written.")
 #            loc='lower center',
 #            ncol=len(impls),
 #            frameon=False,
-#            fontsize=10)
+#            fontsize=12)
 
 # # ─── 12) final touches ───────────────────────────────────────────────────────
 # plt.tight_layout(rect=(0.1,0.08,1,1))

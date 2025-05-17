@@ -34,6 +34,7 @@
 // gcc -DJASMIN -std=c99 -O2 -Wall -Wextra -m64 -c bench.c   -o bench.o
 // gcc -mavx2 bench.o sha3_256_avx2_jasmin.o sha3_384_avx2_jasmin.o sha3_512_avx2_jasmin.o -o bench_sha3_avx2_libjade
 
+
 /* REF TEST (XKCP) */
 // gcc -O3 -Wall -Wextra -m64 -c KeccakP-1600-reference.c -o KeccakP-1600-reference.o
 // gcc -O3 -march=native -flto -funroll-loops -o benchmark_c_xkcp bench.c KeccakP-1600-reference.o
